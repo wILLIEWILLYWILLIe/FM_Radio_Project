@@ -254,6 +254,14 @@ BP_PILOT (19 kHz) → multiply(自身 → 平方) → HP filter (移除 DC) → 
 | **左右聲道出現對稱誤差 (Left 少 16，Right 多 16)** | L-R 路徑的時間沒對齊。`pilot_38k` 在解調前經過了 `multiply(sq)` 和 `fir(hp)` 浪費了 **2 cycles**，直接拿來跟剛做完 BP 的 `bp_lmr` 相乘會導致時間錯位。因為錯位，`audio_lmr` 算錯，導致加減法後產生 `±LMR_error` 變成對稱誤差 | 在 `bp_lmr` 送入 L-R 解調乘法器前，手動加上 **2-cycle register delay (`bp_lmr_d2`)**，讓兩邊訊號時間完全對齊。 |
 | **PASS 32768/32768 (Left & Right)** | — | 全 pipeline 端到端 (End-to-End) bit-true 驗證通過 ✅ |
 
+### J. UVM 環境驗證與 Debug 過程 (my_uvm_tb)
+
+| 問題 | 原因 | 修正 |
+|------|------|------|
+| **編譯錯誤:** `An import statement is illegal when directly within a class scope` | 在 `my_uvm_transaction.sv` 和 `my_uvm_scoreboard.sv` class 內部直接寫了 `import fir_pkg::*;` | 將 `import` 移出 class，依賴 `my_uvm_pkg.sv` 在 package 層級統一 import。 |
+| **模擬卡住 (Hang):** 一直停在 `Waiting for reset deassertion` | `fm_radio_top.sv` 的 reset 是 **Active-Low (`rst_n`)** (值由 0 變 1)，但 UVM Driver / Monitor 裡面預設寫成等待 `vif.reset === 1` 變 `0`。 | 修改 Driver 和 Monitor 的 reset phase logic：改為 `wait(vif.reset === 0); @(posedge vif.clock); wait(vif.reset === 1);`。 |
+| **PASS 32768/32768 + 100% Coverage** | — | 收齊 26 萬筆測資並 100% 吻合 Golden Output ✅ |
+
 ---
 
 ## 8. 目前 SV 檔案列表 (`imp/sv/`)

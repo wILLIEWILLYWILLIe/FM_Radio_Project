@@ -49,7 +49,7 @@ TOP_TB         := $(SV_DIR)/fm_radio_top_tb.sv
 
 # -------------------------------------------------------
 .PHONY: all fir fir_lpr fir_bppilot fir_bplmr fir_hp fir_lmr \
-        demod mult mult_lmr deemph gain_test add_sub_test top clean
+        demod mult mult_lmr deemph gain_test add_sub_test top top_uvm clean
 
 all: fir fir_lpr fir_bppilot fir_bplmr fir_hp fir_lmr \
      demod mult mult_lmr deemph gain_test add_sub_test top
@@ -92,6 +92,9 @@ add_sub_test:
 
 top:
 	xrun $(XFLAGS) $(PKG) $(QARCTAN_PKG) $(FIR_SRC) $(DEMOD_SRC) $(MULT_SRC) $(DEEMPH_SRC) $(GAIN_SRC) $(ADDSUB_SRC) $(TOP_SRC) $(TOP_TB)
+
+top_uvm:
+	xrun $(XFLAGS) -uvm -coverage a +incdir+../uvm $(PKG) $(QARCTAN_PKG) $(FIR_SRC) $(DEMOD_SRC) $(MULT_SRC) $(DEEMPH_SRC) $(GAIN_SRC) $(ADDSUB_SRC) $(TOP_SRC) ../uvm/my_uvm_pkg.sv ../uvm/fm_if.sv ../uvm/my_uvm_tb.sv +UVM_TESTNAME=my_uvm_test
 
 # GUI
 fir_gui:

@@ -30,6 +30,9 @@ make golden
 > This will compile the C++ reference model and generate `.txt` data streams inside `FM_Radio/test/`. These are necessary for the SystemVerilog testbenches.
 
 ### 3. Run SystemVerilog Simulations
+You can run simulations using either **Cadence Xcelium (Makefile)** or **Mentor ModelSim (.do scripts)**.
+
+#### Option A: Cadence Xcelium (Makefile)
 Change into the simulation directory and run the `make top` command to simulate the complete FM radio decoder pipeline.
 ```bash
 cd FM_Radio/imp/sim
@@ -46,6 +49,19 @@ make deemph     # Tests deemphasis.sv
 make fir        # Tests fir.sv
 make all        # Runs all module-level tests
 ```
+
+#### Option B: Mentor ModelSim (.do scripts)
+We also provide complete Tcl `.do` scripts for running the simulations in ModelSim.
+```bash
+cd FM_Radio/imp/sim
+
+# 1. Run the standard Top-Level Testbench
+vsim -c -do fm_sim.do
+
+# 2. Run the UVM Verification Environment
+vsim -c -do fm_uvm_sim.do
+```
+> Omit the `-c` flag and run `vsim -do fm_uvm_sim.do` if you want to open the ModelSim GUI and view the waveforms (configured automatically via `fm_uvm_wave.do`).
 
 ### 4. Logic Synthesis (Synplify)
 To evaluate maximum clock frequency and hardware utilization, run synthesis via Synopsys Synplify:
@@ -89,4 +105,4 @@ During our timing-closure push from 9.8 MHz up to 89.6 MHz, the critical path wa
 
 ## 🎯 Future Work & TODOs
 
-- [ ] **UVM Verification Environment:** Migrate the current direct-test SystemVerilog testbenches into a scalable Universal Verification Methodology (UVM) environment to improve constrained-random testing, coverage collection, and corner-case stimulation.
+- [x] **UVM Verification Environment:** Migrate the current direct-test SystemVerilog testbenches into a scalable Universal Verification Methodology (UVM) environment to improve constrained-random testing, coverage collection, and corner-case stimulation. (Completed using `my_uvm_pkg.sv`)
