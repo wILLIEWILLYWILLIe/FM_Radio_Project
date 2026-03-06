@@ -5,7 +5,7 @@ The file contains the job information from mapper to be displayed as part of the
 *******************************************************************************************-->
 <job_run_status name="Mapper">
 <report_link name="Detailed report">
-<data>/home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/synlog/fm_radio_premap.srr</data>
+<data>/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/synlog/fm_radio_premap.srr</data>
 <title></title>
 </report_link>
 <job_status>
@@ -15,19 +15,19 @@ The file contains the job information from mapper to be displayed as part of the
 <info name="Notes">
 <data>14</data>
 <report_link name="more">
-<data>/home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/synlog/report/fm_radio_premap_notes.txt</data>
+<data>/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/synlog/report/fm_radio_premap_notes.txt</data>
 </report_link>
 </info>
 <info name="Warnings">
 <data>2</data>
 <report_link name="more">
-<data>/home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/synlog/report/fm_radio_premap_warnings.txt</data>
+<data>/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/synlog/report/fm_radio_premap_warnings.txt</data>
 </report_link>
 </info>
 <info name="Errors">
 <data>0</data>
 <report_link name="more">
-<data>/home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/synlog/report/fm_radio_premap_errors.txt</data>
+<data>/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/synlog/report/fm_radio_premap_errors.txt</data>
 </report_link>
 </info>
 <info name="CPU Time">
@@ -40,7 +40,7 @@ The file contains the job information from mapper to be displayed as part of the
 <data>162MB</data>
 </info>
 <info name="Date &amp; Time">
-<data type="timestamp">1772515712</data>
+<data type="timestamp">1772834524</data>
 </info>
 </job_info>
 </job_run_status>

@@ -3,6 +3,7 @@
 
 #project files
 add_file -verilog -vlog_std sysv "../sv/fir_pkg.sv"
+add_file -verilog -vlog_std sysv "../sv/fifo.sv"
 add_file -verilog -vlog_std sysv "../sv/qarctan.sv"
 add_file -verilog -vlog_std sysv "../sv/fir.sv"
 add_file -verilog -vlog_std sysv "../sv/demodulate.sv"

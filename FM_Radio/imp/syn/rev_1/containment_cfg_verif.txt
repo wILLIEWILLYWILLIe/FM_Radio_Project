@@ -14,3 +14,4 @@ fm_radio_top.u_fir_lpr work fir 0 1
 fm_radio_top.u_demod work demodulate 0 1
 fm_radio_top.u_fir_ch_Q work fir 0 1
 fm_radio_top.u_fir_ch_I work fir 0 1
+fm_radio_top.u_input_fifo work fifo 0 1

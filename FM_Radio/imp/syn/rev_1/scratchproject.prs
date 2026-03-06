@@ -1,29 +1,30 @@
 #--  Synopsys, Inc.
 #--  Version O-2018.09-SP1
-#--  Project file /home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/scratchproject.prs
+#--  Project file /home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/scratchproject.prs
 
 #project files
-add_file -verilog -vlog_std sysv "/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fir_pkg.sv"
-add_file -verilog -vlog_std sysv "/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/qarctan.sv"
-add_file -verilog -vlog_std sysv "/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fir.sv"
-add_file -verilog -vlog_std sysv "/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/demodulate.sv"
-add_file -verilog -vlog_std sysv "/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/multiply.sv"
-add_file -verilog -vlog_std sysv "/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/deemphasis.sv"
-add_file -verilog -vlog_std sysv "/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/gain.sv"
-add_file -verilog -vlog_std sysv "/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/add_sub.sv"
-add_file -verilog -vlog_std sysv "/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fm_radio_top.sv"
+add_file -verilog -vlog_std sysv "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fir_pkg.sv"
+add_file -verilog -vlog_std sysv "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fifo.sv"
+add_file -verilog -vlog_std sysv "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/qarctan.sv"
+add_file -verilog -vlog_std sysv "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fir.sv"
+add_file -verilog -vlog_std sysv "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/demodulate.sv"
+add_file -verilog -vlog_std sysv "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/multiply.sv"
+add_file -verilog -vlog_std sysv "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/deemphasis.sv"
+add_file -verilog -vlog_std sysv "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/gain.sv"
+add_file -verilog -vlog_std sysv "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/add_sub.sv"
+add_file -verilog -vlog_std sysv "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fm_radio_top.sv"
 
 
 
 #implementation: "rev_1"
-impl -add /home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1 -type fpga
+impl -add /home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1 -type fpga
 
 #
 #implementation attributes
 
 set_option -vlog_std sysv
 set_option -project_relative_includes 1
-set_option -include_path {/home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/}
+set_option -include_path {/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/}
 
 #par_1 attributes
 set_option -job par_1 -add par
@@ -76,13 +77,13 @@ set_option -multi_file_compilation_unit 1
 set_option -auto_infer_blackbox 0
 
 #timing report file option
-set_option -reporting_filename "/home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/fm_radio.ta"
+set_option -reporting_filename "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/fm_radio.ta"
 
 #automatic place and route (vendor) options
 set_option -write_apr_constraint 1
 
 #set result format/file last
-project -result_file "/home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/fm_radio.vqm"
+project -result_file "/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/fm_radio.vqm"
 
 #design plan options
 impl -active "rev_1"

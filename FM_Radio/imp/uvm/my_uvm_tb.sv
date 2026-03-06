@@ -35,6 +35,7 @@ module my_uvm_tb;
         .valid_in   (vif.valid_in),
         .I_in       (vif.I_in),
         .Q_in       (vif.Q_in),
+        .in_full    (vif.in_full),
         
         // Output
         .valid_out  (vif.valid_out),

@@ -60,6 +60,7 @@ class my_uvm_monitor extends uvm_monitor;
         `uvm_info("MON", "--- PERFORMANCE SUMMARY ---", UVM_NONE)
         `uvm_info("MON", $sformatf("First Valid Output Cycle: %0d", first_out_cycle), UVM_NONE)
         `uvm_info("MON", $sformatf("Total Samples Captured:   %0d", items_captured), UVM_NONE)
+        `uvm_info("MON", $sformatf("Total Simulation Cycles:  %0d", cycles_waited), UVM_NONE)
         `uvm_info("MON", "---------------------------", UVM_NONE)
     endfunction
 

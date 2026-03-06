@@ -12,4 +12,6 @@ define_directive {v:work.multiply} {.noprune} {1}
 define_directive {v:work.multiply} {.distcompnoprune} {1}
 define_directive {v:work.demodulate} {.noprune} {1}
 define_directive {v:work.demodulate} {.distcompnoprune} {1}
+define_directive {v:work.fifo} {.noprune} {1}
+define_directive {v:work.fifo} {.distcompnoprune} {1}
 define_directive {v:work.fm_radio_top} {.distcompmodetop} {1}

@@ -13,7 +13,8 @@ vlib work
 vlog -sv ../sv/fir_pkg.sv
 vlog -sv ../sv/qarctan.sv
 
-# Compile IP / Leaf modules
+# Compile DUT files
+vlog -sv ../sv/fifo.sv
 vlog -sv ../sv/fir.sv
 vlog -sv ../sv/demodulate.sv
 vlog -sv ../sv/multiply.sv

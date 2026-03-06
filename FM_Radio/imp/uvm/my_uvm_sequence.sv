@@ -16,14 +16,14 @@ class my_uvm_sequence extends uvm_sequence#(my_uvm_transaction);
 
         req = my_uvm_transaction::type_id::create("req");
 
-        fd_i = $fopen("../../test/in_I.txt", "r");
-        fd_q = $fopen("../../test/in_Q.txt", "r");
+        fd_i = $fopen(REF_I_FILE, "r");
+        fd_q = $fopen(REF_Q_FILE, "r");
         
         if (fd_i == 0 || fd_q == 0) begin
-            `uvm_fatal("SEQ", "Failed to open in_I.txt or in_Q.txt")
+            `uvm_fatal("SEQ", $sformatf("Failed to open %s or %s", REF_I_FILE, REF_Q_FILE))
         end
 
-        `uvm_info("SEQ", "Starting streaming of 262144 samples...", UVM_LOW)
+        `uvm_info("SEQ", $sformatf("Starting streaming of %0d samples...", TOTAL_INPUT_SAMPLES), UVM_LOW)
 
         while (!$feof(fd_i) && !$feof(fd_q)) begin
             code_i = $fscanf(fd_i, "%d", val_i);

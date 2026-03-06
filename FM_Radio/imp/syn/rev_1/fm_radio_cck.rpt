@@ -16,7 +16,7 @@ max stack size: 8388608 (bytes)
 
 Implementation : rev_1
 
-# Written on Mon Mar  2 23:28:32 2026
+# Written on Fri Mar  6 16:02:04 2026
 
 ##### DESIGN INFO #######################################################
 
@@ -113,6 +113,7 @@ p:Q_in[28]
 p:Q_in[29]
 p:Q_in[30]
 p:Q_in[31]
+p:in_full
 p:left_out[0]
 p:left_out[1]
 p:left_out[2]

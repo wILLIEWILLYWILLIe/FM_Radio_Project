@@ -17,10 +17,43 @@ module fm_radio_top import fir_pkg::*, qarctan_pkg::*; (
     input  logic                            valid_in,
     input  logic signed [WIDTH-1:0]         I_in,
     input  logic signed [WIDTH-1:0]         Q_in,
+    output logic                            in_full,    // FIFO backpressure
     output logic                            valid_out,
     output logic signed [WIDTH-1:0]         left_out,
     output logic signed [WIDTH-1:0]         right_out
 );
+
+    // -------------------------------------------------------
+    // Input FIFO for I/Q samples (satisfies FIFO requirement)
+    // -------------------------------------------------------
+    localparam int FIFO_DEPTH = 16;
+    logic signed [WIDTH-1:0] I_queued, Q_queued;
+    logic                    fifo_empty, fifo_full;
+    logic                    fifo_rd_en;
+
+    // We combine I and Q into one wide FIFO for synchronization
+    fifo #(.DATA_WIDTH(WIDTH*2), .DEPTH(FIFO_DEPTH)) u_input_fifo (
+        .clk(clk), .rst_n(rst_n),
+        .wr_en(valid_in && !fifo_full),
+        .din({I_in, Q_in}),
+        .full(fifo_full),
+        .rd_en(fifo_rd_en),
+        .dout({I_queued, Q_queued}),
+        .empty(fifo_empty),
+        .count()
+    );
+
+    assign in_full = fifo_full;
+    // Simple state machine or logic to feed the pipeline from FIFO
+    // When FIFO is not empty, we can process a new sample every cycle
+    // (Actual FIRs handle their own internal state/decimation)
+    assign fifo_rd_en = !fifo_empty;
+    
+    logic pipeline_valid;
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n) pipeline_valid <= 1'b0;
+        else        pipeline_valid <= fifo_rd_en;
+    end
 
     // -------------------------------------------------------
     // Coefficient wires for each FIR instance
@@ -49,11 +82,11 @@ module fm_radio_top import fir_pkg::*, qarctan_pkg::*; (
     logic signed [WIDTH-1:0] ch_I, ch_Q;
 
     fir #(.TAPS(CHANNEL_TAPS),.DECIM(1),.WIDTH(WIDTH),.CWIDTH(CWIDTH),.BITS(BITS)) u_fir_ch_I (
-        .clk(clk),.rst_n(rst_n),.valid_in(valid_in),.x_in(I_in),
+        .clk(clk),.rst_n(rst_n),.valid_in(pipeline_valid),.x_in(I_queued),
         .coeffs(ch_coeffs),.valid_out(ch_I_valid),.y_out(ch_I));
 
     fir #(.TAPS(CHANNEL_TAPS),.DECIM(1),.WIDTH(WIDTH),.CWIDTH(CWIDTH),.BITS(BITS)) u_fir_ch_Q (
-        .clk(clk),.rst_n(rst_n),.valid_in(valid_in),.x_in(Q_in),
+        .clk(clk),.rst_n(rst_n),.valid_in(pipeline_valid),.x_in(Q_queued),
         .coeffs(ch_coeffs),.valid_out(ch_Q_valid),.y_out(ch_Q));
 
     // -------------------------------------------------------

@@ -45,6 +45,7 @@ module fir import fir_pkg::*; #(
         for (int k = 0; k < PTAPS; k++) begin
             if (k < TAPS) begin
                 logic signed [WIDTH-1:0] x_val;
+                (* syn_multstyle = "DSP" *)
                 int prod;
                 x_val = (k == 0) ? x_in : x_reg[k-1];
                 prod  = int'(coeffs[TAPS-1-k]) * int'(x_val);

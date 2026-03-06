@@ -9,6 +9,7 @@ interface fm_if (
 
     // Input interface
     logic                            valid_in;
+    logic                            in_full;    // Added for backpressure
     logic signed [WIDTH-1:0]         I_in;
     logic signed [WIDTH-1:0]         Q_in;
 
@@ -18,7 +19,7 @@ interface fm_if (
     logic signed [WIDTH-1:0]         right_out;
 
     modport driver (
-        input  clock, reset,
+        input  clock, reset, in_full,
         output valid_in, I_in, Q_in
     );
 

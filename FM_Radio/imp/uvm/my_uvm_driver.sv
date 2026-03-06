@@ -34,6 +34,9 @@ class my_uvm_driver extends uvm_driver#(my_uvm_transaction);
         forever begin
             seq_item_port.get_next_item(req);
             
+            // Wait while FIFO is full
+            while (vif.in_full) @(posedge vif.clock);
+
             // Drive precisely on clock edges
             @(negedge vif.clock);
             vif.valid_in <= 1;
@@ -42,9 +45,7 @@ class my_uvm_driver extends uvm_driver#(my_uvm_transaction);
             
             @(posedge vif.clock);
             #1;
-            vif.valid_in <= 0; // Strobe style, or leave high if consecutive
-                               // Wait actually fm_radio_top_tb holds valid_in=1 as long as sequence is valid, 
-                               // but strobing high per transaction is safest if we run 1 transaction per cycle
+            vif.valid_in <= 0; 
             
             seq_item_port.item_done();
         end

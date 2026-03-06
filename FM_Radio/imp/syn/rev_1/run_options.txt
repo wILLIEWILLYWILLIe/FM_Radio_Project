@@ -1,11 +1,12 @@
 #--  Synopsys, Inc.
 #--  Version O-2018.09-SP1
-#--  Project file /home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/run_options.txt
-#--  Written on Mon Mar  2 23:28:17 2026
+#--  Project file /home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/run_options.txt
+#--  Written on Fri Mar  6 16:01:52 2026
 
 
 #project files
 add_file -verilog -vlog_std sysv "../sv/fir_pkg.sv"
+add_file -verilog -vlog_std sysv "../sv/fifo.sv"
 add_file -verilog -vlog_std sysv "../sv/qarctan.sv"
 add_file -verilog -vlog_std sysv "../sv/fir.sv"
 add_file -verilog -vlog_std sysv "../sv/demodulate.sv"

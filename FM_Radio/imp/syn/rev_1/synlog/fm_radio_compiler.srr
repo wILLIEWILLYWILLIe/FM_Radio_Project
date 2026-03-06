@@ -81,23 +81,29 @@ Synopsys Verilog Compiler, Version comp2018q4p1, Build 004R, Built Nov 27 2018 2
 @I::"/vol/synopsys/fpga/O-2018.09-SP1/lib/synip/hcei/zceistubs.v" (library snps_haps)
 @I::"/vol/synopsys/fpga/O-2018.09-SP1/lib/vlog/scemi_objects.v" (library snps_haps)
 @I::"/vol/synopsys/fpga/O-2018.09-SP1/lib/vlog/scemi_pipes.svh" (library snps_haps)
-@I::"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fir_pkg.sv" (library work)
-@I::"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/qarctan.sv" (library work)
-@I::"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fir.sv" (library work)
-@I::"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/demodulate.sv" (library work)
-@I::"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/multiply.sv" (library work)
-@I::"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/deemphasis.sv" (library work)
-@I::"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/gain.sv" (library work)
-@I::"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/add_sub.sv" (library work)
-@I::"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fm_radio_top.sv" (library work)
+@I::"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fir_pkg.sv" (library work)
+@I::"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fifo.sv" (library work)
+@I::"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/qarctan.sv" (library work)
+@I::"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fir.sv" (library work)
+@I::"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/demodulate.sv" (library work)
+@I::"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/multiply.sv" (library work)
+@I::"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/deemphasis.sv" (library work)
+@I::"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/gain.sv" (library work)
+@I::"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/add_sub.sv" (library work)
+@I::"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fm_radio_top.sv" (library work)
 Verilog syntax check successful!
-File /home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fir_pkg.sv changed - recompiling
-File /home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fir.sv changed - recompiling
-File /home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fm_radio_top.sv changed - recompiling
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fir_pkg.sv":6:8:6:14|Synthesizing module fir_pkg in library work.
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/qarctan.sv":7:8:7:18|Synthesizing module qarctan_pkg in library work.
+Options changed - recompiling
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fir_pkg.sv":6:8:6:14|Synthesizing module fir_pkg in library work.
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/qarctan.sv":7:8:7:18|Synthesizing module qarctan_pkg in library work.
 Selecting top level module fm_radio_top
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fir.sv":11:7:11:9|Synthesizing module fir in library work.
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fifo.sv":5:7:5:10|Synthesizing module fifo in library work.
+
+	DATA_WIDTH=32'b00000000000000000000000001000000
+	DEPTH=32'b00000000000000000000000000010000
+	ADDR_BITS=32'b00000000000000000000000000000100
+   Generated name = fifo_64s_16s_4s
+Running optimization stage 1 on fifo_64s_16s_4s .......
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fir.sv":11:7:11:9|Synthesizing module fir in library work.
 
 	TAPS=32'b00000000000000000000000000010100
 	DECIM=32'b00000000000000000000000000000001
@@ -108,9 +114,9 @@ Selecting top level module fm_radio_top
 	LEVELS=32'b00000000000000000000000000000101
    Generated name = fir_20s_1s_32s_32s_10s_32s_5s
 Running optimization stage 1 on fir_20s_1s_32s_32s_10s_32s_5s .......
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/demodulate.sv":13:7:13:16|Synthesizing module demodulate in library work.
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/demodulate.sv":13:7:13:16|Synthesizing module demodulate in library work.
 Running optimization stage 1 on demodulate .......
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fir.sv":11:7:11:9|Synthesizing module fir in library work.
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fir.sv":11:7:11:9|Synthesizing module fir in library work.
 
 	TAPS=32'b00000000000000000000000000100000
 	DECIM=32'b00000000000000000000000000001000
@@ -121,7 +127,7 @@ Running optimization stage 1 on demodulate .......
 	LEVELS=32'b00000000000000000000000000000101
    Generated name = fir_32s_8s_32s_32s_10s_32s_5s
 Running optimization stage 1 on fir_32s_8s_32s_32s_10s_32s_5s .......
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fir.sv":11:7:11:9|Synthesizing module fir in library work.
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fir.sv":11:7:11:9|Synthesizing module fir in library work.
 
 	TAPS=32'b00000000000000000000000000100000
 	DECIM=32'b00000000000000000000000000000001
@@ -132,15 +138,15 @@ Running optimization stage 1 on fir_32s_8s_32s_32s_10s_32s_5s .......
 	LEVELS=32'b00000000000000000000000000000101
    Generated name = fir_32s_1s_32s_32s_10s_32s_5s
 Running optimization stage 1 on fir_32s_1s_32s_32s_10s_32s_5s .......
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/multiply.sv":7:7:7:14|Synthesizing module multiply in library work.
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/multiply.sv":7:7:7:14|Synthesizing module multiply in library work.
 Running optimization stage 1 on multiply .......
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/add_sub.sv":8:7:8:13|Synthesizing module add_sub in library work.
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/add_sub.sv":8:7:8:13|Synthesizing module add_sub in library work.
 Running optimization stage 1 on add_sub .......
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/deemphasis.sv":17:7:17:16|Synthesizing module deemphasis in library work.
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/deemphasis.sv":17:7:17:16|Synthesizing module deemphasis in library work.
 Running optimization stage 1 on deemphasis .......
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/gain.sv":7:7:7:10|Synthesizing module gain in library work.
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/gain.sv":7:7:7:10|Synthesizing module gain in library work.
 Running optimization stage 1 on gain .......
-@N: CG364 :"/home/gel8580/CE387/Final_Project/FM_Radio/imp/sv/fm_radio_top.sv":14:7:14:18|Synthesizing module fm_radio_top in library work.
+@N: CG364 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fm_radio_top.sv":14:7:14:18|Synthesizing module fm_radio_top in library work.
 Running optimization stage 1 on fm_radio_top .......
 
 At c_ver Exit (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory used current: 80MB peak: 81MB)
@@ -148,7 +154,7 @@ At c_ver Exit (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory
 Process took 0h:00m:01s realtime, 0h:00m:01s cputime
 
 Process completed successfully.
-# Mon Mar  2 23:28:19 2026
+# Fri Mar  6 16:01:53 2026
 
 ###########################################################]
 ###########################################################[
@@ -172,31 +178,31 @@ Implementation : rev_1
 Synopsys Synopsys Netlist Linker, Version comp2018q4p1, Build 004R, Built Nov 27 2018 21:19:49
 
 @N|Running in 64-bit mode
-File /home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/synwork/layer0.srs changed - recompiling
+File /home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/synwork/layer0.srs changed - recompiling
 
 At syn_nfilter Exit (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory used current: 71MB peak: 72MB)
 
 Process took 0h:00m:01s realtime, 0h:00m:01s cputime
 
 Process completed successfully.
-# Mon Mar  2 23:28:20 2026
+# Fri Mar  6 16:01:53 2026
 
 ###########################################################]
 
-Finished Containment srs generation. (Real Time elapsed 0h:00m:01s; CPU Time elapsed 0h:00m:00s; Memory used current: 3MB peak: 4MB)
+Finished Containment srs generation. (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory used current: 3MB peak: 4MB)
 
 Divided design in to 1 groups
-@L:"/home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/synwork//distcomp/distcomp0/distcomp0.log" "Log file for distribution node work.fm_radio_top.verilog "
+@L:"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/synwork//distcomp/distcomp0/distcomp0.log" "Log file for distribution node work.fm_radio_top.verilog "
 Compiling work_fm_radio_top_verilog as a separate process
-Compilation of node work.fm_radio_top finished successfully.Real start time 0h:00m:01s, Real end time = 0h:00m:07s, Total real run time = 0h:00m:06s
+Compilation of node work.fm_radio_top finished successfully.Real start time 0h:00m:00s, Real end time = 0h:00m:06s, Total real run time = 0h:00m:06s
 
 Distributed Compiler Report
 ***************************
 
-DP Name                       Status      Start time     End Time       Total Real Time     Log File                                                                                          
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-work.fm_radio_top.verilog     Success     0h:00m:01s     0h:00m:07s     0h:00m:06s          /home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/synwork//distcomp/distcomp0/distcomp0.log
-==============================================================================================================================================================================================
+DP Name                       Status      Start time     End Time       Total Real Time     Log File                                                                                     
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+work.fm_radio_top.verilog     Success     0h:00m:00s     0h:00m:06s     0h:00m:06s          /home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/synwork//distcomp/distcomp0/distcomp0.log
+=========================================================================================================================================================================================
 ###########################################################[
 
 Copyright (C) 1994-2018 Synopsys, Inc.
@@ -218,14 +224,14 @@ Implementation : rev_1
 Synopsys Synopsys Netlist Linker, Version comp2018q4p1, Build 004R, Built Nov 27 2018 21:19:49
 
 @N|Running in 64-bit mode
-File /home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/synwork//distcomp/distcomp0/distcomp0.srs changed - recompiling
+File /home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/synwork//distcomp/distcomp0/distcomp0.srs changed - recompiling
 
 At syn_nfilter Exit (Real Time elapsed 0h:00m:00s; CPU Time elapsed 0h:00m:00s; Memory used current: 78MB peak: 79MB)
 
 Process took 0h:00m:01s realtime, 0h:00m:01s cputime
 
 Process completed successfully.
-# Mon Mar  2 23:28:27 2026
+# Fri Mar  6 16:02:00 2026
 
 ###########################################################]
 @END
@@ -235,6 +241,6 @@ At c_hdl Exit (Real Time elapsed 0h:00m:08s; CPU Time elapsed 0h:00m:05s; Memory
 Process took 0h:00m:08s realtime, 0h:00m:05s cputime
 
 Process completed successfully.
-# Mon Mar  2 23:28:27 2026
+# Fri Mar  6 16:02:01 2026
 
 ###########################################################]

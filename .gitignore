@@ -1,8 +1,8 @@
-Demo/*
 
 # FM Radio - generated golden reference files (too large for git)
 FM_Radio/test/*.txt
 FM_Radio/test/*.dat
 FM_Radio/imp/sim/xcelium.d/*
+FM_Radio/imp/sim/work/*
 # Final_Project/FM Radio/test/usrp.dat
 

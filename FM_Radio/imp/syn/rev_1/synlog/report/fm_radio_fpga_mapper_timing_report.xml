@@ -5,7 +5,7 @@ Max Top 5 critical clocks will be reported. For rest user needs to refer to Deta
 *******************************************************************************************-->
 <report_table display_priority="2" name="Timing Summary">
 <report_link name="Detailed report">
-<data>/home/gel8580/CE387/Final_Project/FM_Radio/imp/syn/rev_1/synlog/fm_radio_fpga_mapper.srr</data>
+<data>/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/syn/rev_1/synlog/fm_radio_fpga_mapper.srr</data>
 <title>START OF TIMING REPORT</title>
 </report_link>
 <row>
