@@ -1,0 +1,12 @@
+\section{Design Process}
+The implementation followed an iterative methodology from software analysis to optimized hardware.
+
+\subsection{Reference Analysis and Quantification}
+The process began with the C++ software model to establish functional requirements and generate golden reference files. Floating-point logic was converted to 10-bit fixed-point arithmetic, using the \texttt{div1024\_f} function to maintain bit-true accuracy with software integer macros.
+
+\subsection{RTL Implementation}
+Translating C loops into hardware required replacing sequential operations with parallel shift registers and balanced adder trees. Pipeline registers were carefully inserted to align data valid signals across the parallel $L+R$ and $L-R$ paths, ensuring synchronized processing at the final matrix stage.
+
+\subsection{Verification and Optimization}
+Verification involved initial unit testing followed by a comprehensive UVM environment. The UVM testbench automated the validation of thousands of samples using a scoreboard to compare RTL outputs against golden reference files. Synthesis timing reports provided a feedback loop for progressive pipelining and DSP mapping, ensuring the design met the target clock constraints.
+

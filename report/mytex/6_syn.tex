@@ -1,0 +1,75 @@
+\section{Synthesis Results}
+The final hardware implementation was synthesized for the Intel Altera Cyclone IV-E FPGA. This section details the maximum operating frequency and resource utilization achieved through the progressive optimization phases.
+
+\subsection{Maximum Frequency}
+The estimated maximum frequency of the FM Radio design is \textbf{89.6 MHz}. As shown in the timing report in Fig.~\ref{fig:timing_summary}, the synthesizer targeted a clock frequency of 114.3 MHz, resulting in a worst-case slack of \textbf{-2.409 ns}.
+
+To achieve this performance and improve significantly upon the initial sequential baseline (which yielded less than 10 MHz), several structural optimizations were implemented:
+\begin{enumerate}
+    \item \textbf{High-Performance Pipelining}: Deeply pipelining the Quad-Arctan \texttt{demodulate.sv} (32-stage) and FIR filters (2-stage) to reduce combinational depth.
+    \item \textbf{Arithmetic Logic Isolation}: Using \texttt{div1024_f} for constant scaling to eliminate area-intensive and slow division hardware.
+    \item \textbf{Strategic Module Interfacing}: Inserting pipeline registers in `fm_radio_top.sv` at the entry to the de-emphasis stage to break long cross-module combinational paths.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/timing_summary.png} 
+    \caption{Timing summary showing an estimated frequency of 89.6 MHz with -2.409 ns slack.}
+    \label{fig:timing_summary}
+\end{figure}
+
+\subsection{Registers/LUTs/Logic Elements}
+The resource utilization for the FM Stereo Radio on the Cyclone IV-E is summarized below in Fig.~\ref{fig:area_summary}:
+\begin{enumerate}
+    \item \textbf{Total Registers:} 11,835
+    \item \textbf{Total Combinational Functions (LUTs):} 22,041
+    \item \textbf{Total Memory Bits:} 1,024
+    \item \textbf{DSP Blocks:} 249 (of 266 available)
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/area_summary.png} 
+    \caption{Area summary report: 22,041 LUTs, 11,835 Registers, and 249 DSPs.}
+    \label{fig:area_summary}
+\end{figure}
+
+The resource usage reflects the high-throughput, parallel DSP architecture:
+\begin{itemize}
+    \item \textbf{Registers (11,835):} The extensive use of pipelining to reach 90 MHz involves thousands of bits of register delay to align data paths across the various filter and demodulation stages.
+    \item \textbf{LUTs (22,041):} Used for the complex arithmetic in the restored divider, the balanced adder trees in the FIR filters, and the control logic in the top-level FSM.
+\end{itemize}
+
+\subsection{Memory Utilization}
+The design utilizes \textbf{1,024 bits} of memory, mapped to Block RAM (BRAM). This memory is primarily consumed by the entry FIFO in \texttt{fm_radio_top.sv}, which buffers incoming I/Q samples to manage USRP streaming backpressure efficiently with minimal overhead.
+
+\subsection{Multipliers (DSPs)}
+The design utilizes \textbf{249 DSP blocks}. This heavy utilization of dedicated high-performance multipliers is intended by design. By using synthesis pragmas, we successfully moved 249 multiplication operations from the general fabric into the DSP blocks, which was critical for achieving the target frequency and reducing routing congestion across the six parallel FIR filtering paths.
+
+\subsection{Worst path timing analysis}
+The final critical path analysis in Fig.~\ref{fig:wp_schematic} reveals the timing bottleneck is located across the parallel FIR filter branches, specifically within the multi-level adder tree that processes the products of the Pilot Channel extraction filter (\texttt{u_fir_bppilot}).
+
+\begin{enumerate}
+    \item \textbf{Critical Path Slack:} -2.409 ns (at 114.3 MHz target)
+    \item \textbf{Start Point:} \texttt{u_fir_lpr.x_reg[8][0]} (Shift Register in Mono LPR Filter)
+    \item \textbf{End Point:} \texttt{u_fir_bppilot.prod_reg[9]_0[21]} (Product Register in Pilot Filter)
+    \item \textbf{Logic Components:} The path starts at a delay tap in the L+R filter, propagates through a 19x10-bit multiplier (\texttt{SYN_SMULT}), and then traverses an 18-level combinational carry chain (\texttt{lcell_comb}) within the adder tree of the Pilot Filter.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/worst_path_schematic.png}
+    \caption{RTL Schematic of the worst timing path longitudinally located between the LPR and Pilot FIR filter instances, focusing on the deep combinational adder chain.}
+    \label{fig:wp_schematic}
+\end{figure}
+
+The analysis shows that approximately \textbf{65.7\%} of the 11.157 ns total path delay is attributed to logic (7.333 ns), while \textbf{34.3\%} (3.824 ns) is consumed by routing. The bottleneck originates from the high fan-out and deep arithmetic carry chains required to sum the parallel DSP products while maintaining 10-bit precision across the complex filtering network.
+
+\subsection{Optimization Rationale}
+Further timing optimizations were not pursued because:
+\begin{itemize}
+    \item \textbf{Performance}: 89.6 MHz is already 350x the real-time requirement (256 kHz).
+    \item \textbf{Resources}: DSP usage is at 94\%, limiting further parallelization or pipelining.
+    \item \textbf{Stability}: The design already achieves 100\% coverage and 0 bit-errors.
+\end{itemize}
+

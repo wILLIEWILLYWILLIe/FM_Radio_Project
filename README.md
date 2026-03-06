@@ -2,9 +2,15 @@
 
 This repository contains a high-performance, fully pipelined Hardware (SystemVerilog) implementation of an FM Radio receiver and stereo decoder. The design has been heavily optimized for maximum throughput, pushing the synthesis clock constraint to ~90 MHz by leveraging targeted DSP block mapping and extensive pipelining.
 
+## 📄 Project Report (Overleaf)
+The comprehensive final report detailing the architecture, optimizations, and verification results can be found here:
+**[FM Radio Project Report - Overleaf](https://www.overleaf.com/4431444772dtrfmgvgqkgf#eef2d9)**
+
+---
+
 ## 🚀 Quick Start & Co-Development Guide
 
-Since the raw C-simulation data files (golden references) are ignored by git (via `.gitignore`) to save space, **you must generate them locally first** before running any Verilog simulations.
+Since the raw C-simulation data files (golden references) are ignored by git to save space, **you must generate them locally first** before running any Verilog simulations.
 
 ### 1. Load the EDA Environment
 Before compiling C++ or running Cadence Xcelium tools, source the environment variables:
@@ -14,95 +20,69 @@ source myenv_GenusXcelium
 ```
 
 ### 2. Generate Golden Reference Data
-We use a C++ model to generate the perfect "golden" outputs for all intermediate pipeline stages.
+1. **Unzip the compressed USRP raw data file:**
+   ```bash
+   cd FM_Radio/test
+   unzip usrp.zip
+   ```
+2. **Compile and run the reference model:**
+   ```bash
+   cd ..
+   make golden
+   ```
+   *This generates `.txt` data streams inside `FM_Radio/test/` necessary for the SystemVerilog testbenches.*
 
-First, you must unzip the compressed USRP raw data file:
-```bash
-cd FM_Radio/test
-unzip usrp.zip
-```
+### 3. Verification & Simulation
+We support both standard Verilog Testbenches and a full UVM environment.
 
-Then, compile and run the reference model:
-```bash
-cd ..
-make golden
-```
-> This will compile the C++ reference model and generate `.txt` data streams inside `FM_Radio/test/`. These are necessary for the SystemVerilog testbenches.
-
-### 3. Run SystemVerilog Simulations
-You can run simulations using either **Cadence Xcelium (Makefile)** or **Mentor ModelSim (.do scripts)**.
-
-#### Option A: Cadence Xcelium (Makefile)
-Change into the simulation directory and run the `make top` command to simulate the complete FM radio decoder pipeline.
+#### Option A: UVM Verification (Recommended)
+The UVM environment provides 100% functional coverage and automated scoreboard checking.
 ```bash
 cd FM_Radio/imp/sim
-
-# Run the full top-level testbench
-make top
-```
-> You should see `LEFT : Checked=32768 Errors=0 PASS` and `RIGHT: Checked=32768 Errors=0 PASS`.
-
-If you want to run unit tests for specific modules, you can use:
-```bash
-make demod      # Tests demodulate.sv
-make deemph     # Tests deemphasis.sv
-make fir        # Tests fir.sv
-make all        # Runs all module-level tests
+vsim -do fm_uvm_sim.do     # GUI mode with waveforms
+vsim -c -do fm_uvm_sim.do  # Command-line mode
 ```
 
-#### Option B: Mentor ModelSim (.do scripts)
-We also provide complete Tcl `.do` scripts for running the simulations in ModelSim.
+#### Option B: Cadence Xcelium (Makefile)
 ```bash
 cd FM_Radio/imp/sim
-
-# 1. Run the standard Top-Level Testbench
-vsim -c -do fm_sim.do
-
-# 2. Run the UVM Verification Environment
-vsim -c -do fm_uvm_sim.do
+make top       # Comprehensive pipeline test
+make demod     # Unit test for demodulate.sv
+make deemph    # Unit test for deemphasis.sv
+make fir       # Unit test for fir.sv
 ```
-> Omit the `-c` flag and run `vsim -do fm_uvm_sim.do` if you want to open the ModelSim GUI and view the waveforms (configured automatically via `fm_uvm_wave.do`).
 
 ### 4. Logic Synthesis (Synplify)
-To evaluate maximum clock frequency and hardware utilization, run synthesis via Synopsys Synplify:
+To evaluate maximum clock frequency and hardware utilization:
 ```bash
 cd FM_Radio/imp/syn
-
-# Run synthesis using the provided project file
 synplify_pro -batch fm_radio.prj
 ```
-> The output reports (timing, area, log) will be generated inside the `rev_1/` directory.
+*Reports (timing, area) are generated in `rev_1/`.*
 
 ---
 
 ## 🏗️ Hardware Architecture & Optimizations
 
-This design translates a sequential C-based DSP algorithm into a **Fully Pipelined Streaming Architecture** with a throughput of 1 sample/clock.
-
 ### 1. Streaming "Feed-Forward" Datapath
-The design does **not** use FIFOs for inter-module communication. Instead, it relies on a localized explicit valid-chain (`valid_in` → `valid_out`). Modules gracefully wait when `valid` is inactive (such as during the 8x Decimation in the FIR filters).
+The design translates sequential C code into a **Fully Pipelined Streaming Architecture** with a throughput of 1 sample/clock.
 
-### 2. Major Pipeline Optimizations
-During our timing-closure push from 9.8 MHz up to 89.6 MHz, the critical path was heavily sliced. Key transformations include:
-- **Pipelined Restoring Divider:** The 32-bit division in the FM Demodulator (qarctan) was unrolled from a massive combinational loop into a 32-stage pipeline.
-- **Divider Elimination:** Division by 1024 (`/ (1<<BITS)`) in the De-emphasis module was replaced with purely combinational Shift-and-Add wiring (`div1024_f`) that accurately preserves C-language truncation-towards-zero behavior.
-- **2-Cycle FIR MAC:** The FIR filters execute their 32-tap Dot Products using a 1-cycle DSP multiplier stage, followed by an explicitly registered Adder-Tree stage.
-- **Careful DSP Allocation:** Only the most massive 32-tap decimation filters (LPR / LMR) invoke the FPGA's built-in `DSP` block multipliers (via PRAGMA configurations) to avoid exhausting total hardware resources.
+### 2. Key Optimizations (~90 MHz Timing Closure)
+*   **Pipelined Restoring Divider**: 32-stage division for the Quad-Arctan algorithm (replaces massive combinational loops).
+*   **Arithmetic Right Shifts**: Replaced expensive `/ 1024` operators with `>>> 10` using the `div1024_f` function.
+*   **2-Cycle FIR MAC**: Explicitly registered multiplier outputs followed by balanced adder trees.
+*   **DSP Inference**: Synthesis pragmas map multiplications into dedicated DSP hardware.
+*   **Input FIFO Synchronization**: A 16-deep FIFO handles USRP data burstiness and backpressure.
 
 ### 3. File Structure
-* `FM_Radio/src/`: Original C++ algorithmic implementation.
-* `FM_Radio/test/`: Location where `make golden` dumps intermediate text files.
-* `FM_Radio/imp/sv/`: **The core SystemVerilog hardware implementation.**
-  - `fm_radio_top.sv` - Top-level module
-  - `demodulate.sv` - FM Demodulator (qarctan)
-  - `fir.sv` - Parameterized multiply-accumulate filter
-  - `deemphasis.sv` - IIR De-emphasis filter
-* `FM_Radio/imp/sim/`: Xcelium simulation Makefiles and testbenches.
-* `FM_Radio/imp/syn/`: RTL logic synthesis project files and reports (`fm_radio.prj`, `rev_1/`).
-* `note.md`: Historical design notes recording the optimization journey from 9 MHz to 90 MHz.
+*   `FM_Radio/imp/sv/`: Core RTL implementation (Top-level, FIR, Demod, De-emphasis).
+*   `FM_Radio/imp/sim/`: Verification scripts and UVM environment.
+*   `FM_Radio/imp/syn/`: Logic synthesis projects and timing reports.
+*   `note.md`: Detailed engineering log tracking the optimization journey from 9 MHz to 90 MHz.
 
 ---
 
-## 🎯 Future Work & TODOs
-
-- [x] **UVM Verification Environment:** Migrate the current direct-test SystemVerilog testbenches into a scalable Universal Verification Methodology (UVM) environment to improve constrained-random testing, coverage collection, and corner-case stimulation. (Completed using `my_uvm_pkg.sv`)
+## 👥 Collaborator Notes
+*   **Bit-True Accuracy**: The RTL output MUST match the C-model bit-for-bit. Check `my_uvm_scoreboard.sv` reports for any `UVM_ERROR`.
+*   **Clock Constraint**: Current target is **100 MHz**. If you modify the logic, ensure the slack remains manageable (see `Section 6` of the report for timing analysis).
+*   **Decimation**: Remember that the Mono/Stereo FIR filters decimate by 8. Valid signals are handled via a propagate-and-align strategy.

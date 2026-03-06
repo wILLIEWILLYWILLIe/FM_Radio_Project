@@ -1,0 +1,19 @@
+\section{Introduction}
+Digital Signal Processing (DSP) on Field-Programmable Gate Arrays (FPGAs) provides a high-throughput, low-latency solution for real-time communication systems. This project implements a complete FM Stereo Radio receiver pipeline in SystemVerilog, translating a sequential C++ software model into a fully pipelined hardware architecture optimized for 100 MHz performance.
+
+\subsection{FM Radio Theory}
+Frequency Modulation (FM) is a technique where the frequency of the carrier wave is varied in proportion to the message signal. In modern FM broadcasting, stereo audio is transmitted using a multiplexed (MPX) signal. The baseband signal components include:
+\begin{enumerate}
+    \item \textbf{Mono Sum Signal ($L+R$)}: Located in the 0 to 15 kHz range.
+    \item \textbf{Pilot Tone}: A constant 19 kHz tone used for stereo reconstruction.
+    \item \textbf{Stereo Difference Signal ($L-R$)}: Double-sideband suppressed-carrier (DSB-SC) modulation centered at 38 kHz (twice the pilot tone).
+\end{enumerate}
+
+\subsection{Project Objectives}
+The primary objective is to implement the DSP pipeline required to extract $L$ and $R$ channels from raw USRP I/Q data. Key goals include:
+\begin{itemize}
+    \item Implementing modular and parameterized FIR filters and FM demodulators.
+    \item Achieving bit-true accuracy compared to the C++ reference model using 10-bit quantization.
+    \item Optimizing the design for a 100 MHz synthesis clock through extensive pipelining.
+    \item Validating the hardware implementation using a Universal Verification Methodology (UVM) environment.
+\end{itemize}

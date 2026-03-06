@@ -16,4 +16,4 @@ vlib work
 # 2. Compile SV and UVM files
 # 3. Run vsim on UVM module
 # 4. Compare outputs and report results
-vsim -c -do fm_uvm_sim.do
+vsim -do fm_uvm_sim.do

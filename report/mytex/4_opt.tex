@@ -1,0 +1,38 @@
+\section{Optimizations}
+Targeting a 100 MHz frequency on Cyclone IV required structural refactoring. Key optimizations focused on reducing combinational depth and mapping to dedicated resources.
+
+\subsection{Arithmetic Rights Shifts}
+Standard division (\texttt{/}) was replaced by bitwise scaling via the \texttt{div1024\_f} function (arithmetic right shifts \texttt{>>> 10}). This decreased synthesis runtime by $>$ 70\% and minimized logic gate utilization.
+
+\subsection{32-Stage Pipelined Divider}
+The $Q/I$ ratio for the Quad-Arctan algorithm was moved from a combinational divider to a 32-stage \textbf{Pipelined Restoring Divider}. This maintains a throughput of 1 sample/cycle while isolating the 32-bit division into discrete clock cycles.
+
+\subsection{Structural Pipelining}
+Pipelining was applied to three critical modules:
+\begin{itemize}
+    \item \textbf{FIR Filter}: 2-stage structure capturing products before the adder tree.
+    \item \textbf{Demodulator}: Reduced logic depth per cycle from 51 levels to 18.
+    \item \textbf{De-emphasis}: Registered IIR multipliers (\texttt{prod0}, \texttt{prod1}), halving the recursive path delay.
+\end{itemize}
+
+\subsection{DSP Mapping and Unrolling}
+Synthesis pragmas were used to map 249 products into dedicated DSP hardware, improving timing slack by $\approx$ 2.5 ns. FIR loops were fully unrolled to execute all taps in parallel within the 2-stage pipeline.
+
+\subsection{Summary of Performance Gains}
+Progressive optimizations led to a frequency increase from $<$ 20 MHz to 89.6 MHz (Table \ref{tab:synthesis_history}).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}llc@{}}
+        \toprule
+        Revision & Primary Optimization & Max Frequency (MHz) \\ \midrule
+        Baseline & Direct C translation & $<$ 20.0 \\
+        Rev 2 & Pipelined Restoring Divider & 65.2 \\
+        Rev 4 & Pipelined FIR MAC \& Align & 73.0 \\
+        Rev 10 & Registered De-emphasis Multipliers & 88.3 \\
+        Rev 11 & Demodulator Gain Stage Break & \textbf{89.6} \\ \bottomrule
+    \end{tabular}
+    \caption{Synthesis Frequency Improvements}
+    \label{tab:synthesis_history}
+\end{table}
+

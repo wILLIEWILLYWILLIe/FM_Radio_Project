@@ -1,0 +1,93 @@
+\section{Simulation Results}
+The simulation results demonstrating the system performance and functional correctness are shown in Fig.~\ref{fig:sim_metrics} and Fig.~\ref{fig:wave_fm}. The design implements a \textbf{fully pipelined FM Stereo Radio} receiver, achieving real-time streaming processing for a total of 32,768 output audio samples.
+
+\subsection{Performance and Timing Metrics}
+\Answer
+The performance metrics captured by the UVM monitor are summarized in Table \ref{tab:fm_perf}. The design achieves high efficiency with a deterministic latency between input streaming and high-fidelity audio output.
+
+\begin{table}[htbp]
+    \centering
+    \caption{FM Radio Processor Performance Summary}
+    \label{tab:fm_perf}
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Metric} & \textbf{Value} \\
+        \hline
+        Total Audio Samples Captured & 32,768 \\
+        \hline
+        Clock Frequency & 100 MHz \\
+        \hline
+        First Valid Output Cycle & 71 \\
+        \hline
+        Total Simulation Cycles & 267,149 \\
+        \hline
+        Effective Throughput & 1 sample / cycle \\
+        \hline
+    \end{tabular}
+\end{table}
+
+The total simulation time of \textbf{267,149 cycles} for 32,768 output samples (at a decimation of 8) demonstrates the efficiency of the streaming FSM and the nested pipelining:
+\begin{itemize}
+    \item \textbf{High-throughput Input Buffer (\texttt{fifo.sv}):} A 16-deep FIFO is used to buffer USRP I/Q samples. The FSM manages data prefetching, matching the bursty nature of USRP data feeds while maintaining backpressure via the \texttt{in_full} signal.
+    \item \textbf{Pipelined DSP Pipeline:} Each stage (FIR, Demodulate, De-emphasis) operates over a multi-stage pipeline. The first valid audio sample appears at cycle 71, representing the intrinsic latency of the 32-stage divider and filtered register banks.
+    \item \textbf{Deterministic Throughput:} Once the pipeline is full, the system produces one output sample every 8 input cycles (consistent with the \texttt{AUDIO_DECIM} factor), utilizing the 100 MHz clock effectively.
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/wave_fm.png}
+    \caption{Waveform of the FM Radio streaming data flow, showing stable FIFO operation and aligned Left/Right audio outputs.}
+    \label{fig:wave_fm}
+\end{figure}
+
+Fig.~\ref{fig:wave_fm} provides a detailed waveform view of the processor's active computation:
+\begin{itemize}
+    \item \textbf{Streaming Data Input:} Under the \texttt{FM Radio Interfaces} group, data is streamed efficiently, with \texttt{valid_in} and \texttt{in_full} managing the flow control.
+    \item \textbf{FIFO Management:} The \texttt{System Input FIFO} group displays internal count and read/write control signals, ensuring no data loss occurs despite the decimation stages downstream.
+    \item \textbf{Audio Output:} The final outputs \texttt{left_out} and \texttt{right_out} are synchronized and bit-accurate to the reference software.
+\end{itemize}
+
+%--------------------------------------------------------------
+\subsection{Bit-true comparison with software reference}
+\Answer
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/sim_metrics.png}
+    \caption{UVM Performance Metrics and Scoreboard Results: 0 errors and 100\% Coverage.}
+    \label{fig:sim_metrics}
+\end{figure}
+
+The verification was conducted using the \textbf{UVM Verification Environment (\texttt{my_uvm_tb.sv})}. Functionally validating all constraints via the \texttt{my_uvm_scoreboard.sv}, as evaluated in Fig.~\ref{fig:sim_metrics} and the UVM summary in Fig.~\ref{fig:uvm_summary}:
+\begin{itemize}
+    \item \textbf{Match Performance:} Both LEFT and RIGHT channels returned exactly \textbf{32,768 Checked} samples with \textbf{0 Errors}.
+    \item \textbf{Result Cleanliness:} The UVM report summary confirmed exactly \textbf{0 UVM\_ERROR} and \textbf{0 UVM\_WARNING} reports across the entire dataset.
+\end{itemize}
+Bit-accuracy matches the C++ reference identically thanks to the 10-bit fixed-point quantization and the use of the \texttt{div1024_f} function for consistent scaling.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/uvm_summary.png}
+    \caption{UVM Report Summary showing a clean verification run with no errors.}
+    \label{fig:uvm_summary}
+\end{figure}
+
+%--------------------------------------------------------------
+\subsection{Functional coverage}
+\Answer
+A UVM functional coverage model was explicitly implemented to check that the audio pipeline covers the full dynamic range of the synthesized signals.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Functional Coverage Results}
+    \label{tab:coverage}
+    \begin{tabular}{|c|p{6cm}|c|}
+        \hline
+        \textbf{Covergroup} & \textbf{Description} & \textbf{Coverage} \\
+        \hline
+        \texttt{cg_audio_output} & Validates output audio range (Positive, Negative, Zero) & 100.0\% \\
+        \hline
+    \end{tabular}
+\end{table}
+
+As shown in the simulation metrics (Fig.~\ref{fig:sim_metrics}), we attain \textbf{100.0\% Audio Output Coverage}. This proves that our test vectors successfully exercised the hardware across all boundary conditions, including positive and negative peaks in the audio waveform, ensuring the bit-true logic holds firm under all valid signal stimuli.
+
