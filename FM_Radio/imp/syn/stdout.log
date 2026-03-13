@@ -1,5 +1,5 @@
 
-                             Synplify (R) Premier 
+                               Synplify Pro (R) 
 
                 Version O-2018.09-SP1 for RHEL64 - Nov 27, 2018 
 
@@ -12,11 +12,11 @@
 Starting:    /vol/synopsys/fpga/O-2018.09-SP1/linux_a_64/mbin/synplify
 Install:     /vol/synopsys/fpga/O-2018.09-SP1
 Hostname:    finagle.wot.ece.northwestern.edu
-Date:        Fri Mar  6 16:31:32 2026
+Date:        Fri Mar 13 11:14:42 2026
 Version:     O-2018.09-SP1
 
-Arguments:   -product synplify_premier
-ProductType: synplify_premier
+Arguments:   -product synplify_pro
+ProductType: synplify_pro
 
 License checkout: synplifypremierdp
 License: synplifypremierdp from server synopsyslm.ece.northwestern.edu (Using premium license)
@@ -24,4 +24,23 @@ Licensed Vendor: All FPGA
 License Option: ident
 
 
-
+distributed_compile is not supported in current product.
+auto_infer_blackbox is not supported in current product.
+distributed_compile is not supported in current product.
+auto_infer_blackbox is not supported in current product.
+distributed_compile is not supported in current product.
+auto_infer_blackbox is not supported in current product.
+distributed_compile is not supported in current product.
+auto_infer_blackbox is not supported in current product.
+distributed_compile is not supported in current product.
+auto_infer_blackbox is not supported in current product.
+distributed_compile is not supported in current product.
+auto_infer_blackbox is not supported in current product.
+distributed_compile is not supported in current product.
+auto_infer_blackbox is not supported in current product.
+distributed_compile is not supported in current product.
+auto_infer_blackbox is not supported in current product.
+distributed_compile is not supported in current product.
+auto_infer_blackbox is not supported in current product.
+exit status=0
+License checkin: synplifypremierdp

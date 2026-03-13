@@ -4,5 +4,7 @@ FM_Radio/test/*.txt
 FM_Radio/test/*.dat
 FM_Radio/imp/sim/xcelium.d/*
 FM_Radio/imp/sim/work/*
+FM_Radio/imp/test/*
+team_6_final_project/*
 # Final_Project/FM Radio/test/usrp.dat
 

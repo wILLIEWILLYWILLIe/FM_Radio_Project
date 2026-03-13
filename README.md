@@ -1,10 +1,15 @@
-# FM Radio SystemVerilog Implementation
+# FM-Radio-FPGA-Accelerator: High-Performance Pipelined Receiver
+
+[![SystemVerilog](https://img.shields.io/badge/Language-SystemVerilog-blue.svg)](https://en.wikipedia.org/wiki/SystemVerilog)
+[![FPGA-Flow](https://img.shields.io/badge/Flow-FPGA%20Design-green.svg)]()
+[![UVM-Verified](https://img.shields.io/badge/Methodology-UVM-blueviolet.svg)]()
 
 This repository contains a high-performance, fully pipelined Hardware (SystemVerilog) implementation of an FM Radio receiver and stereo decoder. The design has been heavily optimized for maximum throughput, pushing the synthesis clock constraint to ~90 MHz by leveraging targeted DSP block mapping and extensive pipelining.
 
-## 📄 Project Report (Overleaf)
-The comprehensive final report detailing the architecture, optimizations, and verification results can be found here:
-**[FM Radio Project Report - Overleaf](https://www.overleaf.com/4431444772dtrfmgvgqkgf#eef2d9)**
+## 📄 Project Report
+The comprehensive final report detailing the architecture, optimizations, and verification results:
+- [**Final Report (PDF)**](report/team_6_final_report.pdf)
+- [**Project Report (Overleaf)**](https://www.overleaf.com/4431444772dtrfmgvgqkgf#eef2d9)
 
 ---
 
@@ -59,6 +64,14 @@ cd FM_Radio/imp/syn
 synplify_pro -batch fm_radio.prj
 ```
 *Reports (timing, area) are generated in `rev_1/`.*
+
+### 5. Packaging for Submission
+To bundle the project into a structured archive for final submission:
+```bash
+# From the project root
+make zip
+```
+*Creates `team_6_final_project.zip` containing organized `sv/`, `sim/`, `syn/`, `uvm/`, and `test/` directories.*
 
 ---
 

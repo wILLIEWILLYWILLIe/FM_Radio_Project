@@ -1,4 +1,5 @@
-\section{Introduction}
+\section{Background}
+
 Digital Signal Processing (DSP) on Field-Programmable Gate Arrays (FPGAs) provides a high-throughput, low-latency solution for real-time communication systems. This project implements a complete FM Stereo Radio receiver pipeline in SystemVerilog, translating a sequential C++ software model into a fully pipelined hardware architecture optimized for 100 MHz performance.
 
 \subsection{FM Radio Theory}
@@ -15,5 +16,5 @@ The primary objective is to implement the DSP pipeline required to extract $L$ a
     \item Implementing modular and parameterized FIR filters and FM demodulators.
     \item Achieving bit-true accuracy compared to the C++ reference model using 10-bit quantization.
     \item Optimizing the design for a 100 MHz synthesis clock through extensive pipelining.
-    \item Validating the hardware implementation using a Universal Verification Methodology (UVM) environment.
+    \item Validating the hardware implementation using a UVM environment.
 \end{itemize}

@@ -3,7 +3,7 @@ The FM Radio receiver is designed as a high-performance streaming pipeline. Data
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{images/block_diagram.png}
+    \includegraphics[width=0.6\textwidth]{Fig/block_diagram_small.png}
     \caption{System Architecture of the FM Stereo Radio Receiver}
     \label{fig:block_diagram}
 \end{figure}
@@ -11,8 +11,8 @@ The FM Radio receiver is designed as a high-performance streaming pipeline. Data
 \subsection{System Parameters}
 The hardware implementation is strictly aligned with the software reference model specifications:
 \begin{itemize}
-    \item \textbf{Sampling Rate}: Input USRP rate of 256 kHz (\texttt{QUAD_RATE}), decimated by 8 to 32 kHz (\texttt{AUDIO_RATE}) for audio output.
-    \item \textbf{Quantization}: 10-bit fixed-point precision (\texttt{QUANT_VAL = 1024}), using Q10 format for all internal arithmetic.
+    \item \textbf{Sampling Rate}: Input USRP rate of 256 kHz (\texttt{QUAD\_RATE}), decimated by 8 to 32 kHz (\texttt{AUDIO\_RATE}) for audio output.
+    \item \textbf{Quantization}: 10-bit fixed-point precision (\texttt{QUANT\_VAL = 1024}), using Q10 format for all internal arithmetic.
     \item \textbf{Demodulation Gain}: Approximately 758 (Q10), calculated as $\frac{\text{QUAD\_RATE}}{2\pi \times 55000} \times 1024$.
 \end{itemize}
 

@@ -4,19 +4,19 @@ The final hardware implementation was synthesized for the Intel Altera Cyclone I
 \subsection{Maximum Frequency}
 The estimated maximum frequency of the FM Radio design is \textbf{89.6 MHz}. As shown in the timing report in Fig.~\ref{fig:timing_summary}, the synthesizer targeted a clock frequency of 114.3 MHz, resulting in a worst-case slack of \textbf{-2.409 ns}.
 
-To achieve this performance and improve significantly upon the initial sequential baseline (which yielded less than 10 MHz), several structural optimizations were implemented:
-\begin{enumerate}
-    \item \textbf{High-Performance Pipelining}: Deeply pipelining the Quad-Arctan \texttt{demodulate.sv} (32-stage) and FIR filters (2-stage) to reduce combinational depth.
-    \item \textbf{Arithmetic Logic Isolation}: Using \texttt{div1024_f} for constant scaling to eliminate area-intensive and slow division hardware.
-    \item \textbf{Strategic Module Interfacing}: Inserting pipeline registers in `fm_radio_top.sv` at the entry to the de-emphasis stage to break long cross-module combinational paths.
-\end{enumerate}
-
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.0\linewidth]{images/timing_summary.png} 
+    \includegraphics[width=1.0\linewidth]{Fig/timing_summary.png} 
     \caption{Timing summary showing an estimated frequency of 89.6 MHz with -2.409 ns slack.}
     \label{fig:timing_summary}
 \end{figure}
+
+To achieve this performance and improve significantly upon the initial sequential baseline (which yielded less than 10 MHz), several structural optimizations were implemented:
+\begin{enumerate}
+    \item \textbf{High-Performance Pipelining}: Deeply pipelining the Quad-Arctan \texttt{demodulate.sv} (32-stage) and FIR filters (2-stage) to reduce combinational depth.
+    \item \textbf{Arithmetic Logic Isolation}: Using \texttt{div1024\_f} for constant scaling to eliminate area-intensive and slow division hardware.
+    \item \textbf{Strategic Module Interfacing}: Inserting pipeline registers in `fm\_radio\_top.sv` at the entry to the de-emphasis stage to break long cross-module combinational paths.
+\end{enumerate}
 
 \subsection{Registers/LUTs/Logic Elements}
 The resource utilization for the FM Stereo Radio on the Cyclone IV-E is summarized below in Fig.~\ref{fig:area_summary}:
@@ -29,7 +29,7 @@ The resource utilization for the FM Stereo Radio on the Cyclone IV-E is summariz
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.0\linewidth]{images/area_summary.png} 
+    \includegraphics[width=1.0\linewidth]{Fig/area_summary.png} 
     \caption{Area summary report: 22,041 LUTs, 11,835 Registers, and 249 DSPs.}
     \label{fig:area_summary}
 \end{figure}
@@ -41,27 +41,26 @@ The resource usage reflects the high-throughput, parallel DSP architecture:
 \end{itemize}
 
 \subsection{Memory Utilization}
-The design utilizes \textbf{1,024 bits} of memory, mapped to Block RAM (BRAM). This memory is primarily consumed by the entry FIFO in \texttt{fm_radio_top.sv}, which buffers incoming I/Q samples to manage USRP streaming backpressure efficiently with minimal overhead.
+The design utilizes \textbf{1,024 bits} of memory, mapped to Block RAM (BRAM). This memory is primarily consumed by the entry FIFO in \texttt{fm\_radio\_top.sv}, which buffers incoming I/Q samples to manage USRP streaming backpressure efficiently with minimal overhead.
 
 \subsection{Multipliers (DSPs)}
 The design utilizes \textbf{249 DSP blocks}. This heavy utilization of dedicated high-performance multipliers is intended by design. By using synthesis pragmas, we successfully moved 249 multiplication operations from the general fabric into the DSP blocks, which was critical for achieving the target frequency and reducing routing congestion across the six parallel FIR filtering paths.
 
 \subsection{Worst path timing analysis}
-The final critical path analysis in Fig.~\ref{fig:wp_schematic} reveals the timing bottleneck is located across the parallel FIR filter branches, specifically within the multi-level adder tree that processes the products of the Pilot Channel extraction filter (\texttt{u_fir_bppilot}).
-
-\begin{enumerate}
-    \item \textbf{Critical Path Slack:} -2.409 ns (at 114.3 MHz target)
-    \item \textbf{Start Point:} \texttt{u_fir_lpr.x_reg[8][0]} (Shift Register in Mono LPR Filter)
-    \item \textbf{End Point:} \texttt{u_fir_bppilot.prod_reg[9]_0[21]} (Product Register in Pilot Filter)
-    \item \textbf{Logic Components:} The path starts at a delay tap in the L+R filter, propagates through a 19x10-bit multiplier (\texttt{SYN_SMULT}), and then traverses an 18-level combinational carry chain (\texttt{lcell_comb}) within the adder tree of the Pilot Filter.
-\end{enumerate}
-
+The final critical path analysis in Fig.~\ref{fig:wp_schematic} reveals the timing bottleneck is located across the parallel FIR filter branches, specifically within the multi-level adder tree that processes the products of the Pilot Channel extraction filter (\texttt{u\_fir\_bppilot}).
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.0\linewidth]{images/worst_path_schematic.png}
+    \includegraphics[width=1.0\linewidth]{Fig/worst_slack.png}
     \caption{RTL Schematic of the worst timing path longitudinally located between the LPR and Pilot FIR filter instances, focusing on the deep combinational adder chain.}
     \label{fig:wp_schematic}
 \end{figure}
+
+\begin{enumerate}
+    \item \textbf{Critical Path Slack:} -2.409 ns (at 114.3 MHz target)
+    \item \textbf{Start Point:} \texttt{u\_fir\_lpr.x\_reg[8][0]} (Shift Register in Mono LPR Filter)
+    \item \textbf{End Point:} \texttt{u\_fir\_bppilot.prod\_reg[9]\_0[21]} (Product Register in Pilot Filter)
+    \item \textbf{Logic Components:} The path starts at a delay tap in the L+R filter, propagates through a 19x10-bit multiplier (\texttt{SYN\_SMULT}), and then traverses an 18-level combinational carry chain (\texttt{lcell\_comb}) within the adder tree of the Pilot Filter.
+\end{enumerate}
 
 The analysis shows that approximately \textbf{65.7\%} of the 11.157 ns total path delay is attributed to logic (7.333 ns), while \textbf{34.3\%} (3.824 ns) is consumed by routing. The bottleneck originates from the high fan-out and deep arithmetic carry chains required to sum the parallel DSP products while maintaining 10-bit precision across the complex filtering network.
 
@@ -72,4 +71,94 @@ Further timing optimizations were not pursued because:
     \item \textbf{Resources}: DSP usage is at 94\%, limiting further parallelization or pipelining.
     \item \textbf{Stability}: The design already achieves 100\% coverage and 0 bit-errors.
 \end{itemize}
+
+\subsection{Schematic architecture (RTL)}
+
+The RTL architecture of the FM Radio receiver implements a streaming, fully pipelined DSP datapath optimized for high-frequency FPGA synthesis. The design follows a modular approach, where each stage translates a specific component of the FM stereo decoding algorithm into hardware. The architecture consists of the following key components:
+
+\begin{enumerate}
+    \item [a.] \textbf{Hierarchical Top-Level Integration}: \texttt{fm\_radio\_top} acts as the central controller and data distributor. It integrates an input FIFO, channel filters (\texttt{fir\_ch\_I/Q}), an FM demodulator, and specialized stereo decoding branches (Pilot recovery and L-R/L+R extraction) buffered by pipeline registers and ending in volume-controlled gain stages.
+    \item [b.] \textbf{Pipelined FIR Filter}: The \texttt{fir} module is a parameterized design used for channel and audio filtering. It utilizes a long shift-register chain for delay taps and a balanced binary adder tree to perform efficient MAC operations, specifically mapped to DSP blocks for optimal resource utilization.
+    \item [c.] \textbf{FM Demodulator Logic}: The \texttt{demodulate} module performs complex cross-multiplication of I/Q samples to derive frequency deviations. The implementation focuses on maximizing throughput by pipelining the products and using a piecewise rational approximation for phase angle detection.
+    \item [d.] \textbf{Rounding and Gain Control}: Components such as \texttt{deemphasis} and \texttt{gain} handle post-demodulation arithmetic. These modules leverage the \texttt{div1024\_f} function to perform bit-accurate scaling using arithmetic right shifts, maintaining exact correspondence with the C-reference model.
+\end{enumerate}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.0\linewidth]{Fig/whole_rtl_hierarchicial.png}
+    \caption{Top-level \texttt{fm\_radio\_top} schematic: Central DSP pipeline controlling input FIFO, FIR filters, demodulator, and final gain stages.}
+    \label{fig:rtl_top}
+\end{figure}
+
+Figure~\ref{fig:rtl_top} shows the overall system-level integration. The datapath flows sequentially through the input \texttt{fifo\_64s\_16s\_4s} into the parallel channel filters. The demodulated signal is then split into the pilot path (processing at 256 kHz) and the decimated audio paths (processing at 32 kHz), with explicit pipeline stages for timing alignment.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{1.0\textwidth}
+        \centering
+        \includegraphics[width=0.9\linewidth]{Fig/module_demodulate_begining.png}
+        \caption{Front-end cross-multiplication detail: Capturing \texttt{real\_in}/\texttt{imag\_in} and using delayed registers (\texttt{real\_prev}, \texttt{imag\_prev}) to compute the product of the current sample and the conjugate of the previous sample (\texttt{prod\_rr}, \texttt{prod\_ri}, etc.).}
+        \label{fig:demod_begin}
+    \end{subfigure}
+    \vspace{10pt}
+    \begin{subfigure}[b]{1.0\textwidth}
+        \centering
+        \includegraphics[width=1.0\linewidth]{Fig/module_demodulate.png}
+        \caption{Complete longitudinal view of the demodulator datapath, featuring a 32-stage pipelined architecture (visible in the upper chain) used for high-precision phase angle detection via Quad-Arctan approximation.}
+        \label{fig:demod_whole}
+    \end{subfigure}
+    \caption{Internal schematic of the \texttt{demodulate} logic: Optimized for throughput by distributing the complex multiplication and phase derivation across a multi-stage registered pipeline.}
+    \label{fig:rtl_demod}
+\end{figure}
+
+Figure~\ref{fig:rtl_demod} illustrates the internal logic of the \texttt{demodulate} module, which performs complex multiplication followed by a deep pipeline for phase extraction:
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Fig/module_gain.png}
+    \caption{Internal schematic of \texttt{gain} logic: Arithmetic scaling with bit-accurate rounding via specialized \texttt{div1024\_f} blocks.}
+    \label{fig:rtl_gain}
+\end{figure}
+
+Figure~\ref{fig:rtl_gain} shows the implementation of the \texttt{gain} and de-emphasis arithmetic stages. These blocks utilize specialized logic (including \texttt{div1024\_f}) to perform rounding and dequantization, ensuring that fixed-point results remain bit-true to the golden reference model while avoiding hardware division.
+
+
+Figure~\ref{fig:rtl_fir} details the internal structure of the parameterized \texttt{fir} filter through both a microscopic and macroscopic view:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{1.0\textwidth}
+        \centering
+        \includegraphics[width=0.9\linewidth]{Fig/module_fir_begining.png}
+        \caption{Front-end detail showing the input shift register (\texttt{x\_reg}), DSP-mapped multiplication stages, fixed-point rounding (\texttt{div1024\_f}) into \texttt{prod\_reg}, and the decimation counter (\texttt{cnt}) control logic.}
+        \label{fig:fir_begin}
+    \end{subfigure}
+    \vspace{10pt}
+    \begin{subfigure}[b]{1.0\textwidth}
+        \centering
+        \includegraphics[width=1.0\linewidth]{Fig/module_fir.png}
+        \caption{Longitudinal view of the entire 32-tap filter pipeline, highlighting the massive parallel execution of multipliers and the balanced binary reduction tree converging into the final output.}
+        \label{fig:fir_whole}
+    \end{subfigure}
+    \caption{Hardware implementation of the parameterized \texttt{fir} module: Optimized for maximum frequency through balanced arithmetic trees and registered intermediate products.}
+    \label{fig:rtl_fir}
+\end{figure}
+
+
+\subsection{Throughput (Calculations-per-second)}
+\noindent\textbf{Answer:}
+
+The streaming architecture of the FM Radio receiver achieves a throughput of one complex I/Q sample per clock cycle. Given the deeply pipelined nature of the design, the processing rate scales linearly with the maximum operating frequency.
+
+\begin{itemize}
+    \item \textbf{Sample Throughput:} At the estimated maximum frequency of 89.6 MHz:
+    \begin{equation}
+        \text{Throughput}_{\text{sample}} = \frac{89.6 \text{ MHz}}{1.0 \text{ cycles/sample}} = \textbf{89.6 MSamples/s}
+    \end{equation}
+    \item \textbf{Arithmetic Throughput (GOPS):} Each sample undergoes intensive DSP processing. Summing the operations across the seven FIR filters (200 taps total, 2 ops/tap), the FM demodulator (approx. 110 ops), and the post-processing de-emphasis/gain stages (approx. 16 ops), the design executes approximately \textbf{526 operations per sample}:
+    \begin{equation}
+        \text{Throughput}_{\text{Ops}} = 89.6 \text{ MSamples/s} \times 526 \text{ Ops/sample} \approx \textbf{47.13 GOPS}
+    \end{equation}
+\end{itemize}
+
+This \textbf{47.13 GOPS} processing capability, achieved on the Cyclone IV-E fabric, demonstrates the high-performance efficiency of the pipelined DSP datapath. While the real-time requirement for USRP FM streaming is only \textbf{256 kSamples/s}, this implementation provides a 350x performance margin, making the processor suitable for ultra-low latency applications or high-density multi-channel SDR deployments.
+
 
