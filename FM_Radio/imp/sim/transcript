@@ -1,35 +1,35 @@
 # do fm_uvm_sim.do
 # ** Warning: (vlib-34) Library already exists at "work".
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:39 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv ../sv/fir_pkg.sv 
 # -- Compiling package fir_pkg
 # 
 # Top level modules:
 # 	--none--
-# End time: 12:20:39 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:57 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:39 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv ../sv/qarctan.sv 
 # -- Compiling package qarctan_pkg
 # -- Importing package fir_pkg
 # 
 # Top level modules:
 # 	--none--
-# End time: 12:20:39 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:57 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:39 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv ../sv/fifo.sv 
 # -- Compiling module fifo
 # 
 # Top level modules:
 # 	fifo
-# End time: 12:20:39 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:57 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:39 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv ../sv/fir.sv 
 # -- Compiling module fir
 # -- Importing package fir_pkg
@@ -37,10 +37,10 @@
 # 
 # Top level modules:
 # 	fir
-# End time: 12:20:39 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:57 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:39 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv ../sv/demodulate.sv 
 # -- Compiling module demodulate
 # -- Importing package fir_pkg
@@ -48,50 +48,50 @@
 # 
 # Top level modules:
 # 	demodulate
-# End time: 12:20:39 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:57 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:39 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv ../sv/multiply.sv 
 # -- Compiling module multiply
 # -- Importing package fir_pkg
 # 
 # Top level modules:
 # 	multiply
-# End time: 12:20:39 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:57 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:39 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv ../sv/deemphasis.sv 
 # -- Compiling module deemphasis
 # -- Importing package fir_pkg
 # 
 # Top level modules:
 # 	deemphasis
-# End time: 12:20:39 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:57 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:39 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv ../sv/gain.sv 
 # -- Compiling module gain
 # -- Importing package fir_pkg
 # 
 # Top level modules:
 # 	gain
-# End time: 12:20:39 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:57 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:39 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv ../sv/add_sub.sv 
 # -- Compiling module add_sub
 # -- Importing package fir_pkg
 # 
 # Top level modules:
 # 	add_sub
-# End time: 12:20:40 on Mar 13,2026, Elapsed time: 0:00:01
+# End time: 14:24:57 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:40 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv ../sv/fm_radio_top.sv 
 # -- Compiling module fm_radio_top
 # -- Importing package fir_pkg
@@ -99,32 +99,32 @@
 # 
 # Top level modules:
 # 	fm_radio_top
-# End time: 12:20:40 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:57 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:40 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:57 on Mar 15,2026
 # vlog -sv "+incdir+../uvm" ../uvm/my_uvm_pkg.sv 
 # -- Compiling package my_uvm_pkg
 # -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
 # -- Importing package fir_pkg
-# ** Note: (vlog-2286) ../uvm/my_uvm_pkg.sv(9): Using implicit +incdir+/vol/mentor/modelsim-2020.1/modeltech/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# ** Note: (vlog-2286) ../uvm/my_uvm_pkg.sv(9): Using implicit +incdir+/vol/mentor/questa_sim-2019.3_2/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
 # 
 # Top level modules:
 # 	--none--
-# End time: 12:20:40 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:58 on Mar 15,2026, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:40 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:58 on Mar 15,2026
 # vlog -sv ../uvm/fm_if.sv 
 # -- Compiling interface fm_if
 # -- Importing package fir_pkg
 # 
 # Top level modules:
 # 	--none--
-# End time: 12:20:40 on Mar 13,2026, Elapsed time: 0:00:00
+# End time: 14:24:58 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# Model Technology ModelSim SE-64 vlog 2020.1 Compiler 2020.01 Jan 28 2020
-# Start time: 12:20:40 on Mar 13,2026
+# QuestaSim vlog 2019.3_2 Compiler 2019.09 Sep 24 2019
+# Start time: 14:24:58 on Mar 15,2026
 # vlog -sv ../uvm/my_uvm_tb.sv 
 # -- Compiling package my_uvm_tb_sv_unit
 # -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
@@ -135,17 +135,21 @@
 # 
 # Top level modules:
 # 	my_uvm_tb
-# End time: 12:20:41 on Mar 13,2026, Elapsed time: 0:00:01
+# End time: 14:24:58 on Mar 15,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vsim -voptargs=""+acc"" work.my_uvm_tb "+UVM_TESTNAME=my_uvm_test" "+UVM_VERBOSITY=UVM_LOW" 
-# Start time: 12:20:41 on Mar 13,2026
+# Start time: 14:24:58 on Mar 15,2026
 # ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# //  ModelSim SE-64 2020.1 Jan 28 2020 Linux 4.18.0-553.107.1.el8_10.x86_64
+# ** Warning: ../sv/fir.sv(22): (vopt-13314) Defaulting port 'coeffs' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../sv/fir.sv(22): (vopt-13314) Defaulting port 'coeffs' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# ** Warning: ../sv/fir.sv(22): (vopt-13314) Defaulting port 'coeffs' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+# //  Questa Sim
+# //  Version 2019.3_2 linux Sep 24 2019
 # //
-# //  Copyright 1991-2020 Mentor Graphics Corporation
+# //  Copyright 1991-2019 Mentor Graphics Corporation
 # //  All Rights Reserved.
 # //
-# //  ModelSim SE-64 and its associated documentation contain trade
+# //  QuestaSim and its associated documentation contain trade
 # //  secrets and commercial or financial information that are the property of
 # //  Mentor Graphics Corporation and are privileged, confidential,
 # //  and exempt from disclosure under the Freedom of Information Act,
@@ -153,7 +157,7 @@
 # //  is prohibited from disclosure under the Trade Secrets Act,
 # //  18 U.S.C. Section 1905.
 # //
-# ** Warning: License feature 'msimhdlsim' will expire in 5 days.
+# ** Warning: License feature 'msimhdlsim' will expire in 3 days.
 # Loading sv_std.std
 # Loading work.fir_pkg(fast)
 # Loading work.qarctan_pkg(fast)
@@ -163,7 +167,7 @@
 # Loading work.my_uvm_tb_sv_unit(fast)
 # Loading mtiUvm.questa_uvm_pkg(fast)
 # Loading work.my_uvm_tb(fast)
-# Loading work.fm_if(fast__2)
+# Loading work.fm_if(fast)
 # Loading work.fm_radio_top(fast)
 # Loading work.fifo(fast)
 # Loading work.fir(fast)
@@ -174,8 +178,8 @@
 # Loading work.add_sub(fast)
 # Loading work.deemphasis(fast)
 # Loading work.gain(fast)
-# Loading /vol/mentor/modelsim-2020.1/modeltech/uvm-1.1d/linux_x86_64/uvm_dpi.so
-# ** Warning: License feature 'svverification' will expire in 5 days.
+# Loading /vol/mentor/questa_sim-2019.3_2/questasim/uvm-1.1d/linux/uvm_dpi.so
+# ** Warning: License feature 'svverification' will expire in 3 days.
 # ----------------------------------------------------------------
 # UVM-1.1d
 # (C) 2007-2013 Mentor Graphics Corporation
@@ -240,7 +244,7 @@
 # [SCB]     8
 # [SEQ]     2
 # [TEST_DONE]     1
-# ** Note: $finish    : /vol/mentor/modelsim-2020.1/modeltech/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
+# ** Note: $finish    : /vol/mentor/questa_sim-2019.3_2/questasim/linux/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
 #    Time: 2671585001 ps  Iteration: 54  Instance: /my_uvm_tb
-# End time: 12:21:09 on Mar 13,2026, Elapsed time: 0:00:28
-# Errors: 0, Warnings: 0
+# End time: 14:25:16 on Mar 15,2026, Elapsed time: 0:00:18
+# Errors: 0, Warnings: 3

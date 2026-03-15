@@ -49,7 +49,7 @@ module fir import fir_pkg::*; #(
                 int prod;
                 x_val = (k == 0) ? x_in : x_reg[k-1];
                 prod  = int'(coeffs[TAPS-1-k]) * int'(x_val);
-                prods[k] = fir_pkg::div1024_f(prod);
+                prods[k] = prod;
             end else begin
                 prods[k] = 0;
             end
@@ -69,9 +69,9 @@ module fir import fir_pkg::*; #(
     int mac_result;
 
     always_comb begin
-        // Level 0: registered products
+        // Level 0: registered products with div1024 rounding
         for (int k = 0; k < PTAPS; k++)
-            tree[0][k] = prod_reg[k];
+            tree[0][k] = fir_pkg::div1024_f(prod_reg[k]);
 
         // Binary tree reduction
         for (int lv = 0; lv < LEVELS; lv++) begin

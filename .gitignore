@@ -8,3 +8,9 @@ FM_Radio/imp/test/*
 team_6_final_project/*
 # Final_Project/FM Radio/test/usrp.dat
 
+FM_Radio/imp/syn/*
+!FM_Radio/imp/syn/fm_radio.prj
+!FM_Radio/imp/syn/syn.tcl
+!FM_Radio/imp/syn/synlog.tcl
+
+FM_Radio/fm_golden
