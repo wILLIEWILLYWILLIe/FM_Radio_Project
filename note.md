@@ -540,6 +540,49 @@ Ending point:   u_fir_bppilot.prod_reg[9]_0[21]
 
 ---
 
+### 修正 12：`fir.sv` 乘法与初步移位拆分
+**修正前的 Critical Path 分析：**
+```
+Starting point: u_fir_lpr.x_reg 
+Ending point:   u_fir_bppilot.prod_reg   
+```
+此路径包含了 32-bit 乘法器和 10 位移位器 (`div1024_f`)。
+
+**修正：**
+更改`fir.sv`, 自然的想法是将二者拆开。而实际这一过程不会增加任何周期数，因为本身是prod结果在进入reg前先进行除法（或者叫移位），而下一个周期使用prod_reg进行加法。代价是将prod_reg侧加上触发器（移位器），因为是tree，所以会额外增加面积。如果不想增加面积，也是可以单独损失一个周期，在进入tree前再打一拍。
+
+### 修正 13：`demodulate.sv` 角度计算
+**问题：**
+在解调器的最后阶段，交叉相乘、角度计算和增益补偿全部挤在两个 Stage。
+
+**修正：**
+在 `qarctan` 计算之前插入了 `Stage 3e`，专门用于处理交叉相乘的结果。这将解调器的总延迟从 34 增加到了 35 个周期。这保证了 `qarctan` 分段逼近逻辑有充足的时序余量。
+
+### 修正 14：`multiply.sv` 
+**问题：**
+`multiply.sv` 原本在一个周期内完成 32x32 乘法和 `div1024_f` 舍入加法。
+
+**修正：**
+将其拆分为两级：
+- Cycle 1: 仅计算 `x * y`。
+- Cycle 2: 执行 `div1024_f` 缩放。
+同时，在 `fm_radio_top.sv` 中相应增加了 `bp_lmr` 和 `LPR_DELAY` 的延迟，以维持对齐。
+
+### 修正 15：`fir.sv` 加法树
+**问题：**
+时序报表显示 32-tap FIR 的关键路径高达 **25 级逻辑**，主因是二项加法树（Adder Tree）过深。
+
+**修正：**
+将 5 层二项加法树拆分为两段：
+- **Stage B1**: 前 2 层加法。
+- **Stage B2**: 后 3 层加法。
+中间使用 `tree_mid_reg` 寄存。FIR 延迟从 2 拍增加到 **3 拍**。
+配合顶层对齐（`LPR_DELAY=10`, `bp_lmr_d5`）。
+
+**结果频率**：102.3MHz
+
+---
+
 ### 總結：所有修正檔案列表
 
 | 檔案 | 修正內容 |
@@ -556,6 +599,10 @@ Ending point:   u_fir_bppilot.prod_reg[9]_0[21]
 | `fm_radio_top.sv` | Rev 9: 在 add_sub 和 deemphasis 中間加上 pipeline register |
 | `deemphasis.sv` | Rev 10: 管線化 FIR 乘法器 (`prod0`, `prod1` 加上暫存器) |
 | `demodulate.sv` | Rev 11: Stage 3 分成 3c (乘 Gain) 和 3d (除 1024) |
+| `fir.sv`          | Rev 12: 差分乘法器和移位器 |
+| `demodulate.sv`   | Rev 13: 拆分角度计算的乘法和加法 |
+| `multiply.sv`     | Rev 14: 差分乘法器和移位器 |
+| `fir.sv`          | Rev 15: 拆分加法树 |
 
 ---
 

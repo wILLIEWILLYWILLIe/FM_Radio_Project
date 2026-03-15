@@ -147,13 +147,13 @@ module fm_radio_top import fir_pkg::*, qarctan_pkg::*; (
         .clk(clk),.rst_n(rst_n),.valid_in(demod_valid),.x_in(demod),
         .coeffs(bplmr_coeffs),.valid_out(bplmr_valid),.y_out(bp_lmr));
 
-    logic signed [WIDTH-1:0] bp_lmr_d1, bp_lmr_d2, bp_lmr_d3;
-    logic                    bplmr_v_d1, bplmr_v_d2, bplmr_v_d3;
+    logic signed [WIDTH-1:0] bp_lmr_d1, bp_lmr_d2, bp_lmr_d3, bp_lmr_d4, bp_lmr_d5;
+    logic                    bplmr_v_d1, bplmr_v_d2, bplmr_v_d3, bplmr_v_d4, bplmr_v_d5;
 
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            bp_lmr_d1 <= '0; bp_lmr_d2 <= '0; bp_lmr_d3 <= '0;
-            bplmr_v_d1 <= 1'b0; bplmr_v_d2 <= 1'b0; bplmr_v_d3 <= 1'b0;
+            bp_lmr_d1 <= '0; bp_lmr_d2 <= '0; bp_lmr_d3 <= '0; bp_lmr_d4 <= '0; bp_lmr_d5 <= '0;
+            bplmr_v_d1 <= 1'b0; bplmr_v_d2 <= 1'b0; bplmr_v_d3 <= 1'b0; bplmr_v_d4 <= 1'b0; bplmr_v_d5 <= 1'b0;
         end else begin
             bp_lmr_d1 <= bp_lmr;
             bplmr_v_d1 <= bplmr_valid;
@@ -161,6 +161,10 @@ module fm_radio_top import fir_pkg::*, qarctan_pkg::*; (
             bplmr_v_d2 <= bplmr_v_d1;
             bp_lmr_d3 <= bp_lmr_d2;
             bplmr_v_d3 <= bplmr_v_d2;
+            bp_lmr_d4 <= bp_lmr_d3;
+            bplmr_v_d4 <= bplmr_v_d3;
+            bp_lmr_d5 <= bp_lmr_d4;
+            bplmr_v_d5 <= bplmr_v_d4;
         end
     end
 
@@ -170,10 +174,10 @@ module fm_radio_top import fir_pkg::*, qarctan_pkg::*; (
     logic                    lmr_bb_valid;
     logic signed [WIDTH-1:0] lmr_bb;
 
-    // Use hp_valid (or bplmr_v_d3, they arrive at the same time)
+    // Use hp_valid (or bplmr_v_d5, they arrive at the same time)
     multiply u_multiply_lmr (
         .clk(clk),.rst_n(rst_n),.valid_in(hp_valid),
-        .x_in(pilot_38k),.y_in(bp_lmr_d3),.valid_out(lmr_bb_valid),.out(lmr_bb));
+        .x_in(pilot_38k),.y_in(bp_lmr_d5),.valid_out(lmr_bb_valid),.out(lmr_bb));
 
     logic                    lmr_valid;
     logic signed [WIDTH-1:0] audio_lmr;
@@ -189,7 +193,7 @@ module fm_radio_top import fir_pkg::*, qarctan_pkg::*; (
     //   (each pipelined FIR now takes 2 cycles instead of 1)
     // audio_lpr fires 6 cycles before audio_lmr → delay lpr 6 cycles.
     // -------------------------------------------------------
-    localparam int LPR_DELAY = 6;
+    localparam int LPR_DELAY = 10;
 
     logic signed [WIDTH-1:0] lpr_delay_d [0:LPR_DELAY-1];
     logic                    lpr_delay_v [0:LPR_DELAY-1];

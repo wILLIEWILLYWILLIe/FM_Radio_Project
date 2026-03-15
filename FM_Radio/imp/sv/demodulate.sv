@@ -160,16 +160,27 @@ module demodulate import fir_pkg::*, qarctan_pkg::*; (
     // (Registers for 2c are instantiated in the always_ff block below)
 
     // ----------------------------------------------------
-    // PIPELINE STAGE 3a: QUAD multiply + angle calculation
+    // PIPELINE STAGE 3e: QUAD multiply
     // ----------------------------------------------------
-    int stg3a_prod, stg3a_angle_calc;
+    int stg3e_prod;
+
+    assign stg3e_prod = qarctan_pkg::QUAD1 * stg2c_r;
+    // Stage 3a registers
+    int   stg3e_prod_r;
+    logic stg3e_y_neg;
+    logic stg3e_valid;
+    logic stg3e_x_ge0;
+
+    // ----------------------------------------------------
+    // PIPELINE STAGE 3a: angle calculation
+    // ----------------------------------------------------
+    int stg3a_angle_calc;
 
     always_comb begin
-        stg3a_prod = qarctan_pkg::QUAD1 * stg2c_r;
-        if (stg2c_x_ge0)
-            stg3a_angle_calc = qarctan_pkg::QUAD1 - fir_pkg::div1024_f(stg3a_prod);
+        if (stg3e_x_ge0)
+            stg3a_angle_calc = qarctan_pkg::QUAD1 - fir_pkg::div1024_f(stg3e_prod_r);
         else
-            stg3a_angle_calc = qarctan_pkg::QUAD3 - fir_pkg::div1024_f(stg3a_prod);
+            stg3a_angle_calc = qarctan_pkg::QUAD3 - fir_pkg::div1024_f(stg3e_prod_r);
     end
 
     // Stage 3a registers
@@ -234,6 +245,10 @@ module demodulate import fir_pkg::*, qarctan_pkg::*; (
             stg2c_x_ge0  <= 1'b0;
             stg2c_y_neg  <= 1'b0;
             stg2c_valid  <= 1'b0;
+            stg3e_prod_r <= 1'b0;
+            stg3e_y_neg  <= 1'b0;
+            stg3e_valid  <= 1'b0;
+            stg3e_x_ge0  <= 1'b0;
             stg3a_angle  <= '0;
             stg3a_y_neg  <= 1'b0;
             stg3a_valid  <= 1'b0;
@@ -283,11 +298,19 @@ module demodulate import fir_pkg::*, qarctan_pkg::*; (
                 stg2c_y_neg <= stg2b_y_neg;
             end
 
-            // Stage 3a
-            stg3a_valid <= stg2c_valid;
+            // Stage 3e
+            stg3e_valid <= stg2c_valid;
             if (stg2c_valid) begin
+                stg3e_prod_r <= stg3e_prod;
+                stg3e_y_neg  <= stg2c_y_neg;
+                stg3e_x_ge0  <= stg2c_x_ge0;
+            end
+
+            // Stage 3a
+            stg3a_valid <= stg3e_valid;
+            if (stg3e_valid) begin
                 stg3a_angle <= stg3a_angle_calc;
-                stg3a_y_neg <= stg2c_y_neg;
+                stg3a_y_neg <= stg3e_y_neg;
             end
 
             // Stage 3b
