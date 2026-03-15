@@ -15,22 +15,30 @@ module multiply import fir_pkg::*; (
 );
 
     // Combinational
-    logic signed [WIDTH-1:0] next_out;
+    logic signed [WIDTH*2-1:0] next_out;
+    logic signed [WIDTH-1:0] next_out_p2;
+    logic valid_in_p1;
 
-    always_comb begin
-        // 32-bit overflow matches C int arithmetic
-        next_out = WIDTH'(fir_pkg::div1024_f(int'(x_in) * int'(y_in)));
-    end
+    //--------------------pipline1---------------------------
+    logic signed [WIDTH*2-1:0] next_out_p1;
+    assign next_out = int'(x_in) * int'(y_in);
+    //--------------------pipline2---------------------------
+    assign next_out_p2 = WIDTH'(fir_pkg::div1024_f(next_out_p1));
 
     // Sequential
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             out       <= '0;
             valid_out <= 1'b0;
+            next_out_p1 <= '0;
+            valid_in_p1 <= 1'b0;
         end else begin
             valid_out <= 1'b0;
-            if (valid_in) begin
-                out       <= next_out;
+            valid_in_p1 <= valid_in;
+            next_out_p1 <= next_out;
+
+            if (valid_in_p1) begin
+                out       <= next_out_p2;
                 valid_out <= 1'b1;
             end
         end

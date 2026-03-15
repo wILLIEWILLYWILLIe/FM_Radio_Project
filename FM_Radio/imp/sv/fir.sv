@@ -49,7 +49,7 @@ module fir import fir_pkg::*; #(
                 int prod;
                 x_val = (k == 0) ? x_in : x_reg[k-1];
                 prod  = int'(coeffs[TAPS-1-k]) * int'(x_val);
-                prods[k] = fir_pkg::div1024_f(prod);
+                prods[k] = prod;
             end else begin
                 prods[k] = 0;
             end
@@ -60,28 +60,43 @@ module fir import fir_pkg::*; #(
     int prod_reg [0:PTAPS-1];
     logic prod_valid;
 
+    // --- PIPELINE: Mid-tree registers (after level 2) ---
+    localparam int LEVELS = $clog2(PTAPS);
+    localparam int MID_LEVEL = (LEVELS > 2) ? 2 : LEVELS;
+    localparam int MID_NODES = PTAPS >> MID_LEVEL;
+    int tree_mid_reg [0:MID_NODES-1];
+    logic mid_valid;
+
     // --------------------------------------------------------
     // Stage B: balanced binary adder tree (from registered prods)
     // --------------------------------------------------------
-    localparam int LEVELS = $clog2(PTAPS);
 
-    int tree [0:LEVELS][0:PTAPS-1];
+
+    int tree_low  [0:MID_LEVEL][0:PTAPS-1];
+    int tree_high [MID_LEVEL:LEVELS][0:PTAPS-1];
     int mac_result;
 
     always_comb begin
-        // Level 0: registered products
+        // Stage B1: Levels 0 to MID_LEVEL
         for (int k = 0; k < PTAPS; k++)
-            tree[0][k] = prod_reg[k];
+            tree_low[0][k] = fir_pkg::div1024_f(prod_reg[k]);
 
-        // Binary tree reduction
-        for (int lv = 0; lv < LEVELS; lv++) begin
+        for (int lv = 0; lv < MID_LEVEL; lv++) begin
             for (int k = 0; k < (PTAPS >> (lv+1)); k++)
-                tree[lv+1][k] = tree[lv][2*k] + tree[lv][2*k+1];
-            for (int k = (PTAPS >> (lv+1)); k < PTAPS; k++)
-                tree[lv+1][k] = 0;
+                tree_low[lv+1][k] = tree_low[lv][2*k] + tree_low[lv][2*k+1];
         end
 
-        mac_result = tree[LEVELS][0];
+        // Stage B2: Levels MID_LEVEL to LEVELS
+        // We use tree_mid_reg as the input for the remainder of the tree
+        for (int k = 0; k < MID_NODES; k++)
+            tree_high[MID_LEVEL][k] = tree_mid_reg[k];
+
+        for (int lv = MID_LEVEL; lv < LEVELS; lv++) begin
+            for (int k = 0; k < (PTAPS >> (lv+1)); k++)
+                tree_high[lv+1][k] = tree_high[lv][2*k] + tree_high[lv][2*k+1];
+        end
+
+        mac_result = tree_high[LEVELS][0];
     end
 
     // --------------------------------------------------------
@@ -91,12 +106,15 @@ module fir import fir_pkg::*; #(
         if (!rst_n) begin
             for (int k = 0; k < TAPS; k++) x_reg[k] <= '0;
             for (int k = 0; k < PTAPS; k++) prod_reg[k] <= '0;
+            for (int k = 0; k < MID_NODES; k++) tree_mid_reg[k] <= '0;
             cnt        <= '0;
             prod_valid <= 1'b0;
+            mid_valid  <= 1'b0;
             y_reg      <= '0;
             v_reg      <= 1'b0;
         end else begin
             prod_valid <= 1'b0;
+            mid_valid  <= 1'b0;
             v_reg      <= 1'b0;
 
             if (valid_in) begin
@@ -116,8 +134,15 @@ module fir import fir_pkg::*; #(
                 end
             end
 
-            // Stage B output: tree result → y_reg (1 cycle after prod_valid)
+            // Stage B1 output: tree mid result (2 cycles after valid_in)
             if (prod_valid) begin
+                for (int k = 0; k < MID_NODES; k++)
+                    tree_mid_reg[k] <= tree_low[MID_LEVEL][k];
+                mid_valid <= 1'b1;
+            end
+
+            // Stage B2 output: tree result -> y_reg (1 cycle after mid_valid)
+            if (mid_valid) begin
                 y_reg <= WIDTH'(mac_result);
                 v_reg <= 1'b1;
             end

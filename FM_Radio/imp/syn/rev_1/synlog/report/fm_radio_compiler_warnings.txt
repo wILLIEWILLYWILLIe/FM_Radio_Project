@@ -1,3 +1,0 @@
-@W: BN666 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fm_radio_top.sv":35:53:35:64|Unlinked cross language instance u_input_fifo 
-@W: BN666 :"/home/gel8580/FM_Raadio_Proj/FM_Radio/imp/sv/fm_radio_top.sv":35:53:35:64|Unlinked cross language instance u_input_fifo 
-
