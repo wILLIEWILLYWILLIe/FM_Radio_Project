@@ -1,15 +1,15 @@
 # FM-Radio-FPGA-Accelerator: High-Performance Pipelined Receiver
 
 [![SystemVerilog](https://img.shields.io/badge/Language-SystemVerilog-blue.svg)](https://en.wikipedia.org/wiki/SystemVerilog)
-[![FPGA-Flow](https://img.shields.io/badge/Flow-FPGA%20Design-green.svg)]()
-[![UVM-Verified](https://img.shields.io/badge/Methodology-UVM-blueviolet.svg)]()
+[![FPGA-Flow](https://img.shields.io/badge/Flow-FPGA%20Design-green.svg)](FM_Radio/imp/syn)
+[![UVM-Verified](https://img.shields.io/badge/Methodology-UVM-blueviolet.svg)](FM_Radio/imp/uvm)
 
-This repository contains a high-performance, fully pipelined Hardware (SystemVerilog) implementation of an FM Radio receiver and stereo decoder. The design has been heavily optimized for maximum throughput, pushing the synthesis clock constraint to ~90 MHz by leveraging targeted DSP block mapping and extensive pipelining.
+This repository contains a high-performance, fully pipelined Hardware (SystemVerilog) implementation of an FM Radio receiver and stereo decoder. The design has been heavily optimized for maximum throughput, achieving timing closure at **102.3 MHz** by leveraging staged adder trees, targeted DSP block mapping, and extensive pipelining.
 
 ## 📄 Project Report
 The comprehensive final report detailing the architecture, optimizations, and verification results:
-- [**Final Report (PDF)**](report/team_6_final_report.pdf)
-- [**Project Report (Overleaf)**](https://www.overleaf.com/4431444772dtrfmgvgqkgf#eef2d9)
+- [**Final Report (PDF)**](report/team_6_final_project.pdf)
+<!-- - [**Project Report (Overleaf)**](https://www.overleaf.com/4431444772dtrfmgvgqkgf#eef2d9) -->
 
 ---
 
@@ -77,15 +77,12 @@ make zip
 
 ## 🏗️ Hardware Architecture & Optimizations
 
-### 1. Streaming "Feed-Forward" Datapath
-The design translates sequential C code into a **Fully Pipelined Streaming Architecture** with a throughput of 1 sample/clock.
-
-### 2. Key Optimizations (~90 MHz Timing Closure)
-*   **Pipelined Restoring Divider**: 32-stage division for the Quad-Arctan algorithm (replaces massive combinational loops).
-*   **Arithmetic Right Shifts**: Replaced expensive `/ 1024` operators with `>>> 10` using the `div1024_f` function.
-*   **2-Cycle FIR MAC**: Explicitly registered multiplier outputs followed by balanced adder trees.
-*   **DSP Inference**: Synthesis pragmas map multiplications into dedicated DSP hardware.
-*   **Input FIFO Synchronization**: A 16-deep FIFO handles USRP data burstiness and backpressure.
+### 2. Key Optimizations (100+ MHz Timing Closure)
+*   **5-Layer Staged Adder Tree**: The 32-tap FIR's adder tree was split into two stages (`Stage B1` and `Stage B2`) to reduce logic depth from 25 levels, enabling **102.3 MHz** closure.
+*   **Pipelined Multipliers**: All multiplication logic in `fir.sv`, `demodulate.sv`, and `multiply.sv` is decoupled with dedicated registers.
+*   **32-Stage Restoring Divider**: A high-speed pipelined division algorithm for the Quad-Arctan block, replacing large combinational loops.
+*   **DSP Inference**: Synthesis pragmas explicitly map multiplications into dedicated DSP hardware.
+*   **Input FIFO Synchronization**: A 16-deep FIFO manages USRP data burstiness and backpressure.
 
 ### 3. File Structure
 *   `FM_Radio/imp/sv/`: Core RTL implementation (Top-level, FIR, Demod, De-emphasis).
