@@ -95,4 +95,4 @@ make zip
 ## 👥 Collaborator Notes
 *   **Bit-True Accuracy**: The RTL output MUST match the C-model bit-for-bit. Check `my_uvm_scoreboard.sv` reports for any `UVM_ERROR`.
 *   **Clock Constraint**: Current target is **100 MHz**. If you modify the logic, ensure the slack remains manageable (see `Section 6` of the report for timing analysis).
-*   **Decimation**: Remember that the Mono/Stereo FIR filters decimate by 8. Valid signals are handled via a propagate-and-align strategy.
+*   **Decimation**: Remember that the Mono/Stereo FIR filters decimate by 8. Valid signals are handled via a propagate-and-align strategy. 
